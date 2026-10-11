@@ -1,0 +1,39 @@
+================================================================================
+          HUONG DAN CAI DAT VA VAN HANH MAY CHU VAN PHONG SO (24/24)
+================================================================================
+
+Bo cai dat nay da duoc dong goi tron ven (All-In-One):
+- Khong can phai cai dat Node.js hay bat ky phan mem nao them tren may chu!
+- Chay duoc tren moi may Windows (Windows 10, Windows 11, Windows Server).
+
+--------------------------------------------------------------------------------
+BUOC 1: COPY THU MUC NAY SANG MAY CHU 24/24
+--------------------------------------------------------------------------------
+- Chep toan bo thu muc "Goi_Cai_Dat_May_Chu_Van_Phong_So" vao o C:\ hoac D:\ cua may chu 24/24
+  (Vi du de tai: C:\MayChuVanPhongSo hoac Desktop cua may do).
+
+--------------------------------------------------------------------------------
+BUOC 2: KHOI DONG THU MAY CHU
+--------------------------------------------------------------------------------
+- Nhao dup chuot vao file: [ Khoi-Dong-May-Chu.bat ]
+- Cua so hien len se thong bao:
+  + "Tren may chu nay, mo trinh duyet vao: http://localhost:5173"
+  + "Tren CAC MAY KHAC trong phong: http://192.168.x.x:5173"
+- Hay ghi lai dia chi IP do (vi du: 192.168.1.50:5173) de gui cho moi nguoi trong phong truy cap!
+
+--------------------------------------------------------------------------------
+BUOC 3: CAI DAT TU DONG CHAY KHI MAY TINH BAT LEN (RAT QUAN TRONG CHO MAY 24/24)
+--------------------------------------------------------------------------------
+- Nhao dup chuot vao file: [ Cai-Tu-Dong-Bat-Cung-Windows.bat ]
+- Xong! Tu gio, moi khi may tinh duoc bat hoac khoi dong lai sau khi cup dien,
+  may chu se tu dong bat len ma khong can thao tac thu cong.
+
+--------------------------------------------------------------------------------
+LUU Y VE TUONG LUA (WINDOWS FIREWALL):
+--------------------------------------------------------------------------------
+- Neu tren may chu vao duoc (http://localhost:5173) nhung cac may khac trong phong
+  khong vao duoc, hay lam nhu sau tren may chu:
+  1. Mo Start menu -> Tim kiem "Windows Defender Firewall"
+  2. Chon "Allow an app or feature through Windows Defender Firewall"
+  3. Hoac mo cong (Port) 5173 TCP trong Inbound Rules.
+================================================================================
