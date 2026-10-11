@@ -154,12 +154,7 @@ export const BudgetDashboard: React.FC = () => {
       </div>
 
       {/* 6 KPI Cards */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(6, 1fr)', 
-        gap: 10, 
-        marginBottom: 16 
-      }}>
+      <div className="kpi-grid-6">
         <KPICard
           title="Dự toán thu ngân sách"
           value={stats.totalRevPlan}
@@ -309,6 +304,7 @@ export const BudgetDashboard: React.FC = () => {
           pagination={false}
           size="middle"
           bordered
+          scroll={{ x: 900 }}
         />
       </div>
     </div>

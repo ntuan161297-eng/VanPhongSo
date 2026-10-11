@@ -261,6 +261,7 @@ export const TaskDeepAnalysisMode: React.FC<TaskDeepAnalysisModeProps> = ({
           pagination={{ pageSize: 8, showSizeChanger: false }}
           size="middle"
           bordered
+          scroll={{ x: 800 }}
         />
       </div>
     </div>

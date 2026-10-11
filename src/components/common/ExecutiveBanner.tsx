@@ -29,18 +29,10 @@ export const ExecutiveBanner: React.FC<ExecutiveBannerProps> = ({
   ];
 
   return (
-    <div className="fresh-executive-banner" style={{
-      background: 'linear-gradient(135deg, #eef6ff 0%, #f4f8fe 48%, #e8f2fc 100%)',
-      border: '1px solid #cde1f7',
-      borderRadius: 8,
-      padding: '14px 20px',
-      position: 'relative',
-      overflow: 'hidden',
-      boxShadow: '0 2px 6px rgba(11, 116, 229, 0.05)'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, position: 'relative', zIndex: 2 }}>
+    <div className="fresh-executive-banner">
+      <div className="fresh-executive-banner-content">
         {/* Left Side: Document Icon + Title + Summary + Button */}
-        <div style={{ flex: 1.35, display: 'flex', gap: 14 }}>
+        <div className="fresh-executive-banner-left">
           {/* Blue Document Icon Box */}
           <div style={{ 
             width: 44, 
@@ -56,8 +48,8 @@ export const ExecutiveBanner: React.FC<ExecutiveBannerProps> = ({
             <FileText size={24} />
           </div>
 
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
               <h3 style={{ fontSize: 15.5, fontWeight: 700, margin: 0, color: '#0f172a' }}>
                 {title}
               </h3>
@@ -94,17 +86,7 @@ export const ExecutiveBanner: React.FC<ExecutiveBannerProps> = ({
         </div>
 
         {/* Center: Hung Yen Historic Landmark Photo with Soft Feathered Edge Fade ("Hình ảnh mờ") */}
-        <div style={{ 
-          position: 'relative',
-          width: 250, 
-          height: 94, 
-          flexShrink: 0, 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          overflow: 'hidden',
-          margin: '0 10px'
-        }}>
+        <div className="fresh-executive-banner-photo">
           <img 
             src="/assets/pho_hien_gate.jpg" 
             alt="Chùa Chuông / Văn Miếu Xích Đằng Phố Hiến"
@@ -113,7 +95,6 @@ export const ExecutiveBanner: React.FC<ExecutiveBannerProps> = ({
               height: '100%',
               objectFit: 'cover',
               objectPosition: 'center 40%',
-              // Soft gradient mask fading smoothly into the card on both left and right edges
               maskImage: 'linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)',
               WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)',
               filter: 'contrast(1.08) brightness(1.02) saturate(0.96)',
@@ -123,13 +104,7 @@ export const ExecutiveBanner: React.FC<ExecutiveBannerProps> = ({
         </div>
 
         {/* Right Side: 4 Executive KPI Numbers - Căn chỉnh lưới chuẩn xác, thẳng hàng tuyệt đối */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: `repeat(${displayMetrics.length}, minmax(84px, auto))`, 
-          gap: 18, 
-          flexShrink: 0,
-          alignItems: 'start'
-        }}>
+        <div className="fresh-executive-metrics-grid">
           {displayMetrics.map((m, idx) => (
             <div 
               key={idx} 

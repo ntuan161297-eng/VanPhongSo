@@ -152,6 +152,7 @@ export const AppHeader: React.FC = () => {
     >
       {/* Background Historic Watermark Graphic: Cầu Hưng Hà / Yên Lệnh, Chùa Chuông Phố Hiến, Sóng sông Hồng & Mây cổ ("Phần họa tiết phía trên cùng") */}
       <div 
+        className="header-watermark"
         style={{
           position: 'absolute',
           left: '320px',
@@ -228,17 +229,20 @@ export const AppHeader: React.FC = () => {
       </div>
 
       {/* Left: Official State Emblem & Product Title */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, zIndex: 2 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, zIndex: 2, minWidth: 0 }}>
         {/* Biểu trưng chính thức tỉnh Hưng Yên */}
-        <div style={{ 
-          width: 44, 
-          height: 44, 
-          flexShrink: 0, 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          filter: 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3))'
-        }}>
+        <div 
+          className="header-emblem-logo"
+          style={{ 
+            width: 44, 
+            height: 44, 
+            flexShrink: 0, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            filter: 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3))'
+          }}
+        >
           <img 
             src="/assets/hung_yen_logo.png" 
             alt="Biểu trưng tỉnh Hưng Yên" 
@@ -250,34 +254,42 @@ export const AppHeader: React.FC = () => {
           />
         </div>
 
-        <div>
-          <div style={{ 
-            color: 'rgba(255, 255, 255, 0.92)', 
-            fontSize: 11, 
-            letterSpacing: '0.04em', 
-            fontWeight: 600,
-            textTransform: 'uppercase',
-            lineHeight: 1.2
-          }}>
+        <div style={{ minWidth: 0 }}>
+          <div 
+            className="header-emblem-text-top"
+            style={{ 
+              color: 'rgba(255, 255, 255, 0.92)', 
+              fontSize: 11, 
+              letterSpacing: '0.04em', 
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              lineHeight: 1.2,
+              whiteSpace: 'nowrap'
+            }}
+          >
             ỦY BAN NHÂN DÂN TỈNH HƯNG YÊN
           </div>
-          <div style={{ 
-            color: '#ffffff', 
-            fontSize: 19, 
-            fontWeight: 800, 
-            letterSpacing: '-0.01em',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            lineHeight: 1.3
-          }}>
+          <div 
+            className="header-emblem-text-title"
+            style={{ 
+              color: '#ffffff', 
+              fontSize: 19, 
+              fontWeight: 800, 
+              letterSpacing: '-0.01em',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              lineHeight: 1.3,
+              whiteSpace: 'nowrap'
+            }}
+          >
             VĂN PHÒNG SỐ
             <span style={{ 
-              fontSize: 10.5, 
+              fontSize: 10, 
               background: '#034a8c', 
               border: '1px solid #1e88e5',
               color: '#ffffff', 
-              padding: '1px 8px', 
+              padding: '1px 6px', 
               borderRadius: 4,
               fontWeight: 700,
               letterSpacing: '0.04em'
@@ -289,9 +301,9 @@ export const AppHeader: React.FC = () => {
       </div>
 
       {/* Right: Search Pill, Bell with 3 badge, User Avatar & Name */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 18, zIndex: 2 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, zIndex: 2, flexShrink: 0 }}>
         {/* Search input in pill shape matching image */}
-        <div style={{ width: 280 }}>
+        <div className="header-search-container" style={{ width: 260 }}>
           <Input
             placeholder="Tìm kiếm nhiệm vụ, dự án, văn bản..."
             prefix={<SearchOutlined style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 13, marginRight: 4 }} />}
@@ -323,7 +335,8 @@ export const AppHeader: React.FC = () => {
               height: 32,
               borderRadius: '50%',
               background: 'rgba(255, 255, 255, 0.1)',
-              transition: 'background 0.2s'
+              transition: 'background 0.2s',
+              flexShrink: 0
             }}
             title="Thông báo điều hành"
           >
@@ -339,17 +352,18 @@ export const AppHeader: React.FC = () => {
             style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: 9, 
+              gap: 8, 
               cursor: 'pointer',
-              padding: '2px 8px 2px 4px',
+              padding: '2px 6px 2px 2px',
               borderRadius: 20,
-              transition: 'background 0.2s'
+              transition: 'background 0.2s',
+              flexShrink: 0
             }}
           >
             <div 
               style={{ 
-                width: 34, 
-                height: 34, 
+                width: 32, 
+                height: 32, 
                 borderRadius: '50%', 
                 background: '#4a90e2', 
                 color: '#ffffff',
@@ -358,12 +372,13 @@ export const AppHeader: React.FC = () => {
                 justifyContent: 'center',
                 fontWeight: 700,
                 fontSize: 12,
-                boxShadow: '0 2px 4px rgba(0,0,0,0.15)'
+                boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
+                flexShrink: 0
               }}
             >
               {user.avatarText}
             </div>
-            <div style={{ textAlign: 'left', lineHeight: 1.25 }}>
+            <div className="header-user-text" style={{ textAlign: 'left', lineHeight: 1.25 }}>
               <div style={{ color: '#ffffff', fontSize: 13, fontWeight: 700 }}>
                 {user.name}
               </div>

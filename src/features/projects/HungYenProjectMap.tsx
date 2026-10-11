@@ -724,7 +724,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
       <div ref={mapContainerRef} style={{ width: '100%', height: '100%', zIndex: 1 }} />
 
       {/* 2. Top-Left Floating Controls: Home, Search, Layer Switcher */}
-      <div style={{
+      <div className="map-top-left-controls" style={{
         position: 'absolute',
         top: 14,
         left: 16,
@@ -756,7 +756,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
         </Tooltip>
 
         {/* Search Input Box */}
-        <div style={{ width: 220 }}>
+        <div className="map-search-box" style={{ width: 220 }}>
           <Input
             placeholder="🔍 Dự án trọng điểm..."
             value={searchQuery}
@@ -800,7 +800,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
       </div>
 
       {/* 3. Top-Right Floating Controls: Compass & Compass Heading */}
-      <div style={{
+      <div className="map-top-right-controls" style={{
         position: 'absolute',
         top: 14,
         right: 16,
@@ -854,7 +854,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
 
       {/* 4. Bottom-Left Floating Panel: "Giám sát & Theo dõi Dự án" (Ẩn khi xem bản đồ không gian thuần túy) */}
       {!hideStatsPanel && (
-      <div style={{
+      <div className="map-bottom-left-panel" style={{
         position: 'absolute',
         bottom: 16,
         left: 16,
@@ -1059,7 +1059,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
       )}
 
       {/* 5. Bottom-Right Floating Panel: "Chú thích bản đồ" (Map Legend matching screenshot) */}
-      <div style={{
+      <div className="map-bottom-right-legend" style={{
         position: 'absolute',
         bottom: 16,
         right: 16,

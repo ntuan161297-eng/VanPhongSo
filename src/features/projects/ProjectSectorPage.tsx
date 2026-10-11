@@ -268,12 +268,7 @@ export const ProjectSectorPage: React.FC<ProjectSectorPageProps> = ({
       {/* Condensed Sector KPIs & Donut */}
       <Row gutter={[14, 14]} style={{ marginBottom: 16 }}>
         <Col xs={24} lg={16}>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(4, 1fr)', 
-            gap: 10,
-            height: '100%'
-          }}>
+          <div className="kpi-grid-4">
             <KPICard
               title="Tổng số dự án"
               value={stats.total}
@@ -363,6 +358,7 @@ export const ProjectSectorPage: React.FC<ProjectSectorPageProps> = ({
           pagination={{ pageSize: 8, showSizeChanger: true }}
           size="middle"
           bordered
+          scroll={{ x: 1000 }}
         />
       </div>
 

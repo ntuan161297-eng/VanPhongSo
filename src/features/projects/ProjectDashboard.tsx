@@ -276,7 +276,7 @@ export const ProjectDashboard: React.FC = () => {
   return (
     <div>
       {/* Page Title Bar & Action Buttons (Matching Screenshot) */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: activeViewMode === 'MAP' ? 8 : 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: activeViewMode === 'MAP' ? 8 : 12 }}>
         <div>
           <h1 style={{ fontSize: 19, fontWeight: 800, color: '#0f172a', margin: 0 }}>
             {activeViewMode === 'MAP' ? 'Bản đồ không gian dự án trọng điểm' : 'Tổng quan dự án trọng điểm'}
@@ -289,7 +289,7 @@ export const ProjectDashboard: React.FC = () => {
         </div>
 
         {/* Action Button Group */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
           <Button
             type={activeViewMode === 'OVERVIEW' ? 'primary' : 'default'}
             icon={<Layers size={14} />}
@@ -418,6 +418,7 @@ export const ProjectDashboard: React.FC = () => {
               pagination={false}
               size="middle"
               bordered
+              scroll={{ x: 1000 }}
             />
           </div>
         </div>
@@ -441,12 +442,7 @@ export const ProjectDashboard: React.FC = () => {
           </div>
 
           {/* 6 KPI Cards Row */}
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(6, 1fr)', 
-            gap: 10, 
-            marginBottom: 16 
-          }}>
+          <div className="kpi-grid-6">
             <KPICard
               title="Tổng dự án trọng điểm"
               value={stats.total}
@@ -605,6 +601,7 @@ export const ProjectDashboard: React.FC = () => {
               pagination={{ pageSize: 8, showSizeChanger: true }}
               size="middle"
               bordered
+              scroll={{ x: 1050 }}
             />
           </div>
         </>

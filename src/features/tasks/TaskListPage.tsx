@@ -263,12 +263,7 @@ export const TaskListPage: React.FC<TaskListPageProps> = ({
       </div>
 
       {/* 4 KPIs Row */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-        gap: 10, 
-        marginBottom: 16 
-      }}>
+      <div className="kpi-grid-4">
         <KPICard
           title="Tổng số trong danh mục"
           value={tasks.length}
@@ -319,6 +314,7 @@ export const TaskListPage: React.FC<TaskListPageProps> = ({
           pagination={{ pageSize: 10, showSizeChanger: true }}
           size="middle"
           bordered
+          scroll={{ x: 950 }}
         />
       </div>
 

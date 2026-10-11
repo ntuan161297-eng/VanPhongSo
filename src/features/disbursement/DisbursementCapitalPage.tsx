@@ -190,12 +190,7 @@ export const DisbursementCapitalPage: React.FC<DisbursementCapitalPageProps> = (
       </div>
 
       {/* KPI Row (4 Cards) */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(4, 1fr)', 
-        gap: 10, 
-        marginBottom: 16 
-      }}>
+      <div className="kpi-grid-4">
         <KPICard
           title="Kế hoạch vốn nhóm"
           value={Number(stats.totalPlan).toLocaleString('vi-VN')}
@@ -270,6 +265,7 @@ export const DisbursementCapitalPage: React.FC<DisbursementCapitalPageProps> = (
           pagination={{ pageSize: 8, showSizeChanger: true }}
           size="middle"
           bordered
+          scroll={{ x: 1000 }}
         />
       </div>
     </div>

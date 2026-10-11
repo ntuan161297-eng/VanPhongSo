@@ -9,7 +9,7 @@ import { UserGuideModal } from '../admin/UserGuideModal';
 
 export const AppLayout: React.FC = () => {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F3F6FA' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F3F6FA', overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       {/* TẦNG 1: HEADER */}
       <AppHeader />
 
@@ -20,7 +20,7 @@ export const AppLayout: React.FC = () => {
       </div>
 
       {/* TẦNG 4: DASHBOARD / NỘI DUNG NGHIỆP VỤ */}
-      <main style={{ flex: 1, padding: '16px 20px 32px 20px', maxWidth: '100%', width: '100%' }}>
+      <main className="app-main-content">
         <Outlet />
       </main>
 

@@ -95,7 +95,7 @@ export const BudgetExpensePage: React.FC = () => {
       </div>
 
       {/* 4 KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 16 }}>
+      <div className="kpi-grid-4">
         <KPICard
           title="Dự toán chi ngân sách"
           value={stats.totalExpPlan}
@@ -183,7 +183,7 @@ export const BudgetExpensePage: React.FC = () => {
           <span className="gov-card-title">Bảng tổng hợp các khoản chi ngân sách</span>
           <span style={{ fontSize: 12, color: '#0b74e5', fontWeight: 600 }}>{expenseCats.length} Lĩnh vực chi</span>
         </div>
-        <Table dataSource={expenseCats} columns={columns} rowKey="name" pagination={false} size="middle" bordered />
+        <Table dataSource={expenseCats} columns={columns} rowKey="name" pagination={false} size="middle" bordered scroll={{ x: 800 }} />
       </div>
     </div>
   );

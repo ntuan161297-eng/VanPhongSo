@@ -262,6 +262,7 @@ export const TaskUrgentActionMode: React.FC<TaskUrgentActionModeProps> = ({
           pagination={{ pageSize: 8, showSizeChanger: false }}
           size="middle"
           bordered
+          scroll={{ x: 1000 }}
         />
       </div>
     </div>

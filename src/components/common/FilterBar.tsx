@@ -116,7 +116,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       }}
     >
       {/* Left Filters */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+      <div className="filter-bar-left" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
         {/* Năm */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <span style={{ fontSize: 12.5, color: '#64748b' }}>Năm:</span>
@@ -234,7 +234,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       </div>
 
       {/* Right Actions */}
-      <Space size={6}>
+      <Space size={6} className="filter-bar-right">
         <Button 
           icon={<CloseCircleOutlined />} 
           onClick={resetFilters}

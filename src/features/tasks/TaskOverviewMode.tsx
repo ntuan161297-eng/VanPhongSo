@@ -258,12 +258,7 @@ export const TaskOverviewMode: React.FC<TaskOverviewModeProps> = ({
       </div>
 
       {/* Row of 7 KPI Cards (Exact layout from image) */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(7, 1fr)', 
-        gap: 10, 
-        marginBottom: 16 
-      }}>
+      <div className="kpi-grid-7">
         <KPICard
           title="Tổng nhiệm vụ"
           value="124"
@@ -524,6 +519,7 @@ export const TaskOverviewMode: React.FC<TaskOverviewModeProps> = ({
           pagination={false}
           size="middle"
           bordered
+          scroll={{ x: 950 }}
         />
       </div>
     </div>

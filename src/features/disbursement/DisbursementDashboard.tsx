@@ -255,12 +255,7 @@ export const DisbursementDashboard: React.FC = () => {
       </div>
 
       {/* 6 KPI Cards Row */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(6, 1fr)', 
-        gap: 10, 
-        marginBottom: 16 
-      }}>
+      <div className="kpi-grid-6">
         <KPICard
           title="Tổng kế hoạch vốn"
           value={Number(stats.totalPlan).toLocaleString('vi-VN')}
@@ -442,6 +437,7 @@ export const DisbursementDashboard: React.FC = () => {
           pagination={{ pageSize: 8, showSizeChanger: true }}
           size="middle"
           bordered
+          scroll={{ x: 1000 }}
         />
       </div>
     </div>
