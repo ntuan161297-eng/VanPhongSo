@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Badge, Popover, Dropdown, MenuProps, Input, Tag, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { Badge, Popover, Dropdown, MenuProps, Input, Tag, Button, Empty, message } from 'antd';
 import { 
   BellOutlined, 
   SearchOutlined, 
@@ -10,12 +11,19 @@ import {
   SafetyCertificateOutlined, 
   LogoutOutlined, 
   SwapOutlined,
-  CheckOutlined
+  CheckOutlined,
+  ClockCircleOutlined,
+  RightOutlined,
+  ThunderboltOutlined,
+  CheckCircleFilled,
+  ExclamationCircleFilled,
+  InfoCircleFilled
 } from '@ant-design/icons';
-import { useApp, HUNG_YEN_OFFICE_LEADERS } from '../../context/AppContext';
+import { useApp, HUNG_YEN_OFFICE_LEADERS, NotificationItem, NotificationCategory } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
 export const AppHeader: React.FC = () => {
+  const navigate = useNavigate();
   const { 
     user, 
     role, 
@@ -24,42 +32,331 @@ export const AppHeader: React.FC = () => {
     logout,
     notifications, 
     markNotificationAsRead,
+    markAllNotificationsAsRead,
+    expediteNotificationTask,
     setReportModalOpen,
     setAdminModalOpen,
     setGuideModalOpen
   } = useApp();
 
   const [searchValue, setSearchValue] = useState('');
-  const unreadCount = 3; // Exactly matching reference image badge "3"
+  const [notifPopoverOpen, setNotifPopoverOpen] = useState(false);
+  const [activeNotifTab, setActiveNotifTab] = useState<'ALL' | 'OVERDUE' | 'NEAR' | 'PENDING'>('ALL');
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+  const overdueCount = notifications.filter(n => n.category === 'TASK_OVERDUE').length;
+  const nearCount = notifications.filter(n => n.category === 'TASK_NEAR').length;
+  const pendingCount = notifications.filter(n => n.category === 'TASK_PENDING').length;
+
+  const filteredNotifications = notifications.filter(n => {
+    if (activeNotifTab === 'OVERDUE') return n.category === 'TASK_OVERDUE';
+    if (activeNotifTab === 'NEAR') return n.category === 'TASK_NEAR';
+    if (activeNotifTab === 'PENDING') return n.category === 'TASK_PENDING';
+    return true;
+  });
+
+  const handleTaskClick = (item: NotificationItem) => {
+    markNotificationAsRead(item.id);
+    setNotifPopoverOpen(false);
+    if (item.actionUrl) {
+      navigate(item.actionUrl);
+    }
+  };
+
+  const handleExpedite = (e: React.MouseEvent, item: NotificationItem) => {
+    e.stopPropagation();
+    expediteNotificationTask(item.id);
+    message.success(`Đã gửi thông báo đôn đốc khẩn cấp tới ${item.deptName || 'đơn vị chủ trì'}!`);
+  };
 
   const notificationContent = (
-    <div style={{ width: 340, maxHeight: 380, overflowY: 'auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid #f0f0f0' }}>
-        <span style={{ fontWeight: 600, color: '#1e293b' }}>Thông báo chỉ đạo điều hành</span>
-        <Tag color="red">{unreadCount} khẩn cấp</Tag>
-      </div>
-      <div>
-        {notifications.map(item => (
-          <div 
-            key={item.id} 
-            onClick={() => markNotificationAsRead(item.id)}
-            style={{ 
-              padding: '10px 12px', 
-              borderBottom: '1px solid #f8fafc',
-              cursor: 'pointer',
-              background: item.read ? '#ffffff' : '#f0f9ff',
-              transition: 'background 0.2s'
-            }}
+    <div style={{ width: 400, maxWidth: '90vw' }}>
+      {/* Header */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        padding: '12px 16px', 
+        borderBottom: '1px solid #f1f5f9',
+        background: '#f8fafc',
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontWeight: 700, color: '#0f172a', fontSize: 14 }}>
+            Nhắc việc & Đôn đốc nhiệm vụ
+          </span>
+          {unreadCount > 0 && (
+            <Tag color="red" style={{ margin: 0, borderRadius: 10, fontSize: 11, fontWeight: 600 }}>
+              {unreadCount} mới
+            </Tag>
+          )}
+        </div>
+        {unreadCount > 0 && (
+          <Button 
+            type="link" 
+            size="small" 
+            onClick={markAllNotificationsAsRead}
+            style={{ padding: 0, fontSize: 11.5, color: '#0284c7' }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 6 }}>
-              <span style={{ fontSize: 13, fontWeight: item.read ? 400 : 600, color: '#1e293b', lineHeight: 1.4 }}>
-                {item.title}
-              </span>
-              {!item.read && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#0284c7', marginTop: 5, flexShrink: 0 }} />}
-            </div>
-            <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>{item.time}</div>
+            Đã đọc tất cả
+          </Button>
+        )}
+      </div>
+
+      {/* Tabs Filter Bar */}
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 6, 
+        padding: '8px 12px', 
+        borderBottom: '1px solid #e2e8f0', 
+        background: '#ffffff',
+        overflowX: 'auto'
+      }}>
+        <button
+          type="button"
+          onClick={() => setActiveNotifTab('ALL')}
+          style={{
+            border: 'none',
+            background: activeNotifTab === 'ALL' ? '#e0f2fe' : 'transparent',
+            color: activeNotifTab === 'ALL' ? '#0369a1' : '#64748b',
+            fontWeight: activeNotifTab === 'ALL' ? 700 : 500,
+            fontSize: 12,
+            padding: '4px 10px',
+            borderRadius: 16,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4
+          }}
+        >
+          Tất cả <span style={{ opacity: 0.8 }}>({notifications.length})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveNotifTab('OVERDUE')}
+          style={{
+            border: 'none',
+            background: activeNotifTab === 'OVERDUE' ? '#fee2e2' : 'transparent',
+            color: activeNotifTab === 'OVERDUE' ? '#b91c1c' : '#64748b',
+            fontWeight: activeNotifTab === 'OVERDUE' ? 700 : 500,
+            fontSize: 12,
+            padding: '4px 10px',
+            borderRadius: 16,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4
+          }}
+        >
+          🚨 Quá hạn <span style={{ opacity: 0.8 }}>({overdueCount})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveNotifTab('NEAR')}
+          style={{
+            border: 'none',
+            background: activeNotifTab === 'NEAR' ? '#fef3c7' : 'transparent',
+            color: activeNotifTab === 'NEAR' ? '#b45309' : '#64748b',
+            fontWeight: activeNotifTab === 'NEAR' ? 700 : 500,
+            fontSize: 12,
+            padding: '4px 10px',
+            borderRadius: 16,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4
+          }}
+        >
+          ⏳ Sắp đến hạn <span style={{ opacity: 0.8 }}>({nearCount})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveNotifTab('PENDING')}
+          style={{
+            border: 'none',
+            background: activeNotifTab === 'PENDING' ? '#f1f5f9' : 'transparent',
+            color: activeNotifTab === 'PENDING' ? '#334155' : '#64748b',
+            fontWeight: activeNotifTab === 'PENDING' ? 700 : 500,
+            fontSize: 12,
+            padding: '4px 10px',
+            borderRadius: 16,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4
+          }}
+        >
+          📝 Chờ duyệt <span style={{ opacity: 0.8 }}>({pendingCount})</span>
+        </button>
+      </div>
+
+      {/* List Container */}
+      <div style={{ maxHeight: 380, overflowY: 'auto' }}>
+        {filteredNotifications.length === 0 ? (
+          <div style={{ padding: '32px 16px', textAlign: 'center' }}>
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Không có thông báo trong mục này" />
           </div>
-        ))}
+        ) : (
+          filteredNotifications.map(item => {
+            const isOverdue = item.category === 'TASK_OVERDUE';
+            const isNear = item.category === 'TASK_NEAR';
+            const isPending = item.category === 'TASK_PENDING';
+            const isDone = item.category === 'TASK_DONE';
+
+            return (
+              <div 
+                key={item.id} 
+                onClick={() => handleTaskClick(item)}
+                style={{ 
+                  padding: '12px 14px', 
+                  borderBottom: '1px solid #f1f5f9',
+                  cursor: 'pointer',
+                  background: item.read ? '#ffffff' : (isOverdue ? '#fff5f5' : '#f0f9ff'),
+                  transition: 'background 0.2s',
+                  position: 'relative'
+                }}
+                className="notification-item-card"
+              >
+                {/* Top tags row */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 5 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+                    {item.taskCode && (
+                      <Tag 
+                        color={isOverdue ? 'error' : isNear ? 'warning' : isPending ? 'processing' : 'success'}
+                        style={{ margin: 0, fontSize: 10.5, fontWeight: 700, borderRadius: 4, padding: '0 5px' }}
+                      >
+                        {item.taskCode}
+                      </Tag>
+                    )}
+                    {item.deptName && (
+                      <span style={{ fontSize: 11, color: '#475569', fontWeight: 600 }}>
+                        {item.deptName}
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                    <span style={{ fontSize: 11, color: '#94a3b8' }}>{item.time}</span>
+                    {!item.read && (
+                      <span style={{ 
+                        width: 7, 
+                        height: 7, 
+                        borderRadius: '50%', 
+                        background: isOverdue ? '#ef4444' : '#0284c7', 
+                        flexShrink: 0 
+                      }} />
+                    )}
+                  </div>
+                </div>
+
+                {/* Main title */}
+                <div style={{ 
+                  fontSize: 13, 
+                  fontWeight: item.read ? 500 : 700, 
+                  color: isOverdue ? '#991b1b' : '#0f172a', 
+                  lineHeight: 1.45,
+                  marginBottom: 6
+                }}>
+                  {item.title}
+                </div>
+
+                {/* Deadline and Sub information */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6, fontSize: 11.5 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#64748b' }}>
+                    {item.deadline && (
+                      <span style={{ 
+                        display: 'inline-flex', 
+                        alignItems: 'center', 
+                        gap: 4,
+                        color: isOverdue ? '#dc2626' : isNear ? '#d97706' : '#64748b',
+                        fontWeight: (isOverdue || isNear) ? 600 : 400
+                      }}>
+                        <ClockCircleOutlined style={{ fontSize: 11 }} /> {item.deadline}
+                      </span>
+                    )}
+                    {item.expediteCount !== undefined && item.expediteCount > 0 && (
+                      <Tag color="magenta" style={{ margin: 0, fontSize: 10, padding: '0 4px', borderRadius: 10 }}>
+                        Đã đôn đốc {item.expediteCount} lần
+                      </Tag>
+                    )}
+                  </div>
+
+                  {/* Action buttons */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={(e) => e.stopPropagation()}>
+                    {(isOverdue || isNear) && (
+                      <Button
+                        size="small"
+                        type="dashed"
+                        danger={isOverdue}
+                        icon={<ThunderboltOutlined style={{ fontSize: 11 }} />}
+                        onClick={(e) => handleExpedite(e, item)}
+                        style={{ 
+                          height: 24, 
+                          fontSize: 11, 
+                          padding: '0 8px',
+                          borderRadius: 4,
+                          fontWeight: 600,
+                          borderColor: isOverdue ? '#fca5a5' : '#fcd34d',
+                          color: isOverdue ? '#b91c1c' : '#b45309',
+                          background: isOverdue ? '#fff1f2' : '#fffbeb'
+                        }}
+                      >
+                        Đôn đốc ngay
+                      </Button>
+                    )}
+                    <Button
+                      size="small"
+                      type="link"
+                      onClick={() => handleTaskClick(item)}
+                      style={{ height: 24, fontSize: 11.5, padding: '0 4px', color: '#0284c7', fontWeight: 600 }}
+                    >
+                      Xem chi tiết <RightOutlined style={{ fontSize: 9 }} />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Footer */}
+      <div style={{ 
+        padding: '10px 14px', 
+        borderTop: '1px solid #f1f5f9', 
+        background: '#f8fafc',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8
+      }}>
+        <span style={{ fontSize: 12, color: '#64748b' }}>
+          Tổng cộng: <strong>{notifications.length}</strong> thông báo nhắc việc
+        </span>
+        <Button
+          type="primary"
+          size="small"
+          onClick={() => {
+            setNotifPopoverOpen(false);
+            navigate('/nhiem-vu/can-xu-ly');
+          }}
+          style={{ 
+            fontSize: 12, 
+            height: 28, 
+            borderRadius: 6,
+            background: '#0798eb',
+            fontWeight: 600 
+          }}
+        >
+          Toàn bộ nhiệm vụ cần xử lý ➔
+        </Button>
       </div>
     </div>
   );
@@ -382,8 +679,14 @@ export const AppHeader: React.FC = () => {
           />
         </div>
 
-        {/* Notifications Popover with red badge "3" */}
-        <Popover content={notificationContent} trigger="click" placement="bottomRight">
+        {/* Notifications Popover with dynamic unread badge */}
+        <Popover 
+          content={notificationContent} 
+          trigger="click" 
+          placement="bottomRight"
+          open={notifPopoverOpen}
+          onOpenChange={setNotifPopoverOpen}
+        >
           <div 
             style={{ 
               cursor: 'pointer',
@@ -394,13 +697,13 @@ export const AppHeader: React.FC = () => {
               width: 32,
               height: 32,
               borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: notifPopoverOpen ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.1)',
               transition: 'background 0.2s',
               flexShrink: 0
             }}
-            title="Thông báo điều hành"
+            title="Nhắc việc & Thông báo điều hành"
           >
-            <Badge count={3} size="small" offset={[2, -3]} color="#EF4444">
+            <Badge count={unreadCount} size="small" offset={[2, -3]} color="#EF4444">
               <BellOutlined style={{ fontSize: 16, color: '#ffffff' }} />
             </Badge>
           </div>
