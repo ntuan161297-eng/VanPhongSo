@@ -177,7 +177,7 @@ export const DisbursementCapitalPage: React.FC<DisbursementCapitalPageProps> = (
       <div style={{ marginBottom: 14 }}>
         <ExecutiveBanner
           title={`Tiến độ nguồn vốn: ${title}`}
-          summary={`Tổng kế hoạch vốn được giao là ${Number(stats.totalPlan).toLocaleString('vi-VN')} tỷ VNĐ. Toàn nhóm đã giải ngân ${Number(stats.totalDisbursed).toLocaleString('vi-VN')} tỷ VNĐ (tương đương ${stats.avgRate}%). Các đơn vị đang đẩy nhanh tiến độ hoàn thiện hồ sơ nghiệm thu thanh toán trước ngày 31/12.`}
+          summary={`Tổng kế hoạch vốn được giao là ${stats.totalPlan} tỷ VNĐ. Toàn nhóm đã giải ngân ${stats.totalDisbursed} tỷ VNĐ (tương đương ${stats.avgRate}%). Các đơn vị đang đẩy nhanh tiến độ hoàn thiện hồ sơ nghiệm thu thanh toán trước ngày 31/12.`}
           actionText="Xuất danh sách"
           onActionClick={handleExportCSV}
           metrics={[
@@ -193,7 +193,7 @@ export const DisbursementCapitalPage: React.FC<DisbursementCapitalPageProps> = (
       <div className="kpi-grid-4">
         <KPICard
           title="Kế hoạch vốn nhóm"
-          value={Number(stats.totalPlan).toLocaleString('vi-VN')}
+          value={stats.totalPlan}
           unit="tỷ"
           icon={<DollarSign size={16} />}
           iconBg="#eff6ff"
@@ -202,7 +202,7 @@ export const DisbursementCapitalPage: React.FC<DisbursementCapitalPageProps> = (
         />
         <KPICard
           title="Đã giải ngân"
-          value={Number(stats.totalDisbursed).toLocaleString('vi-VN')}
+          value={stats.totalDisbursed}
           unit="tỷ"
           icon={<TrendingUp size={16} />}
           iconBg="#f0fdf4"
@@ -221,7 +221,7 @@ export const DisbursementCapitalPage: React.FC<DisbursementCapitalPageProps> = (
         />
         <KPICard
           title="Số vốn còn lại"
-          value={Number(stats.remaining).toLocaleString('vi-VN')}
+          value={stats.remaining}
           unit="tỷ"
           icon={<AlertCircle size={16} />}
           iconBg="#fff7ed"

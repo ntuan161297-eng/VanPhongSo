@@ -12,11 +12,11 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 70,
     status: 'DANG_XU_LY',
     priority: 'KHAN',
-    assignedLeader: 'Đ/c Đinh Gia Dũng - Chánh VP UBND tỉnh',
+    assignedLeader: 'Đ/c Nguyễn Mạnh Quyền - Chủ tịch UBND tỉnh',
     field: 'Khoa học công nghệ & Chuyển đổi số',
     expediteCount: 1,
     history: [
-      { id: 'h1', date: '15/01/2026', action: 'Giao nhiệm vụ', performer: 'Văn phòng UBND tỉnh', comment: 'Giao cơ quan chủ trì xây dựng kế hoạch triển khai ngày chuyển đổi số toàn tỉnh.' }
+      { id: 'h1', date: '15/01/2026', action: 'Giao nhiệm vụ', performer: 'UBND tỉnh Hưng Yên', comment: 'Chủ tịch UBND tỉnh giao cơ quan chủ trì xây dựng kế hoạch triển khai ngày chuyển đổi số toàn tỉnh.' }
     ],
     relatedDocs: ['Kế hoạch số 12/KH-UBND', 'Quyết định số 105/QĐ-UBND']
   },
@@ -31,11 +31,11 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 40,
     status: 'SAP_DEN_HAN',
     priority: 'HOA_TOC',
-    assignedLeader: 'Đ/c Nguyễn Quang Trung - Phó Chánh VP',
+    assignedLeader: 'Đ/c Nguyễn Lê Huy - Phó Chủ tịch UBND tỉnh',
     field: 'Tài chính - Kế hoạch đầu tư',
     expediteCount: 2,
     history: [
-      { id: 'h2', date: '20/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo Văn phòng UBND tỉnh', comment: 'Yêu cầu tổng hợp chi tiết kế hoạch vốn từng dự án trọng điểm.' }
+      { id: 'h2', date: '20/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo UBND tỉnh', comment: 'Yêu cầu tổng hợp chi tiết kế hoạch vốn từng dự án trọng điểm.' }
     ],
     relatedDocs: ['Công văn số 342/UBND-KT']
   },
@@ -50,11 +50,11 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 20,
     status: 'QUA_HAN_CHUA_HOAN_THANH',
     priority: 'HOA_TOC',
-    assignedLeader: 'Đ/c Nguyễn Đức Huỳnh - Phó Chánh VP',
+    assignedLeader: 'Đ/c Lê Quang Hòa - Phó Chủ tịch UBND tỉnh',
     field: 'Đô thị - Quy hoạch xây dựng',
     expediteCount: 3,
     history: [
-      { id: 'h3', date: '10/01/2026', action: 'Giao nhiệm vụ', performer: 'Văn phòng UBND tỉnh', comment: 'Đôn đốc lần 3 yêu cầu hoàn thành đồ án quy hoạch phân khu các KCN mới.' }
+      { id: 'h3', date: '10/01/2026', action: 'Giao nhiệm vụ', performer: 'UBND tỉnh Hưng Yên', comment: 'Đôn đốc lần 3 yêu cầu hoàn thành đồ án quy hoạch phân khu các KCN mới.' }
     ],
     relatedDocs: ['Thông báo kết luận số 55/TB-UBND']
   },
@@ -69,11 +69,11 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 10,
     status: 'CHUA_GIAO',
     priority: 'TRUNG_BINH',
-    assignedLeader: 'Đ/c Nguyễn Văn Dực - Phó Chánh VP',
+    assignedLeader: 'Đ/c Phạm Văn Nghiêm - Phó Chủ tịch UBND tỉnh',
     field: 'Nông nghiệp & Môi trường',
     expediteCount: 0,
     history: [
-      { id: 'h4', date: '05/02/2026', action: 'Dự thảo giao việc', performer: 'Văn phòng UBND tỉnh', comment: 'Đang lấy ý kiến chuyên gia và các hợp tác xã nông nghiệp cơ sở.' }
+      { id: 'h4', date: '05/02/2026', action: 'Dự thảo giao việc', performer: 'UBND tỉnh Hưng Yên', comment: 'Đang lấy ý kiến chuyên gia và các hợp tác xã nông nghiệp cơ sở.' }
     ],
     relatedDocs: ['Tờ trình số 18/TTr-SNNMT']
   },
@@ -88,11 +88,11 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 35,
     status: 'DANG_XU_LY',
     priority: 'KHAN',
-    assignedLeader: 'Đ/c Nguyễn Xuân Phương - Phó Chánh VP',
+    assignedLeader: 'Đ/c Nguyễn Hùng Nam - Phó Chủ tịch UBND tỉnh',
     field: 'Chính quyền 2 cấp & Cải cách TTHC',
     expediteCount: 1,
     history: [
-      { id: 'h5', date: '12/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo Văn phòng UBND tỉnh', comment: 'Thí điểm mô hình điều hành chính quyền 2 cấp tại 104 xã, phường sau sắp xếp.' }
+      { id: 'h5', date: '12/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo UBND tỉnh', comment: 'Thí điểm mô hình điều hành chính quyền 2 cấp tại 104 xã, phường sau sắp xếp.' }
     ],
     relatedDocs: ['Nghị quyết số 1666/NQ-UBTVQH15']
   }
@@ -126,12 +126,12 @@ export const generateTasksMock = (): TaskItem[] => {
   ];
 
   const leaders = [
-    'Đ/c Đinh Gia Dũng - Chánh VP UBND tỉnh',
-    'Đ/c Nguyễn Quang Trung - Phó Chánh VP',
-    'Đ/c Nguyễn Đức Huỳnh - Phó Chánh VP',
-    'Đ/c Nguyễn Văn Dực - Phó Chánh VP',
-    'Đ/c Nguyễn Xuân Phương - Phó Chánh VP',
-    'Đ/c Lê Anh Tuấn - Phó Chánh VP'
+    'Đ/c Nguyễn Mạnh Quyền - Chủ tịch UBND tỉnh',
+    'Đ/c Nguyễn Lê Huy - Phó Chủ tịch UBND tỉnh',
+    'Đ/c Lê Quang Hòa - Phó Chủ tịch UBND tỉnh',
+    'Đ/c Phạm Văn Nghiêm - Phó Chủ tịch UBND tỉnh',
+    'Đ/c Nguyễn Hùng Nam - Phó Chủ tịch UBND tỉnh',
+    'Đ/c Lại Văn Hoàn - Phó Chủ tịch UBND tỉnh'
   ];
 
   const taskTitles = [

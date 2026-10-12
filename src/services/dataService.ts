@@ -150,13 +150,30 @@ export const DisbursementService = {
   },
 
   getStats: (records: DisbursementItem[]) => {
-    // Số liệu chuẩn xác 100% từ IOC Trung tâm Điều hành Chỉ số Đầu tư công tỉnh Hưng Yên (Ảnh 3)
+    // Check if records is a subset for a specific capital category (Vốn đầu tư / Vốn sự nghiệp / CNTT)
+    const isSubset = records.length > 0 && records.length < DISBURSEMENT_MOCK.length;
+
+    let totalPlanNum: number;
+    let totalDisbursedNum: number;
+    let remainingNum: number;
+    let avgRate: string;
+
+    if (isSubset) {
+      // Calculate accurately from the specific capital category records
+      totalPlanNum = records.reduce((sum, r) => sum + r.planAmount, 0);
+      totalDisbursedNum = records.reduce((sum, r) => sum + r.disbursedAmount, 0);
+      remainingNum = totalPlanNum - totalDisbursedNum;
+      avgRate = totalPlanNum > 0 ? ((totalDisbursedNum / totalPlanNum) * 100).toFixed(2) : "0.00";
+    } else {
+      // Số liệu chuẩn xác 100% từ IOC Trung tâm Điều hành Chỉ số Đầu tư công tỉnh Hưng Yên (Ảnh 3)
+      totalPlanNum = 41325.480;         // 41.325.480 triệu (TTg & HĐND giao)
+      totalDisbursedNum = 28446.835;    // 28.446.835 triệu (Đã giải ngân lũy kế)
+      remainingNum = totalPlanNum - totalDisbursedNum;
+      avgRate = "68.800";            // 68.800%
+    }
+
     const primeMinisterPlan = 43452.580; // 43.452.580 triệu
-    const totalPlan = 41325.480;         // 41.325.480 triệu (TTg & HĐND giao)
     const localPlan = 56385.647;         // 56.385.647 triệu (Địa phương giao)
-    const totalDisbursed = 28446.835;    // 28.446.835 triệu (Đã giải ngân lũy kế)
-    const avgRate = "68.800";            // 68.800%
-    const remaining = (totalPlan - totalDisbursed).toFixed(3); // 12.878,645 tỷ
 
     const lowDeptsCount = records.filter(r => r.status === 'THAP').length;
     const metTargetCount = records.filter(r => r.status === 'DAT_MUC_TIEU').length;
@@ -164,9 +181,12 @@ export const DisbursementService = {
     return {
       primeMinisterPlan: primeMinisterPlan.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
       localPlan: localPlan.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
-      totalPlan: totalPlan.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
-      totalDisbursed: totalDisbursed.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
-      remaining: Number(remaining).toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+      totalPlanNum,
+      totalDisbursedNum,
+      remainingNum,
+      totalPlan: totalPlanNum.toLocaleString('vi-VN', { minimumFractionDigits: isSubset ? 1 : 3, maximumFractionDigits: isSubset ? 1 : 3 }),
+      totalDisbursed: totalDisbursedNum.toLocaleString('vi-VN', { minimumFractionDigits: isSubset ? 1 : 3, maximumFractionDigits: isSubset ? 1 : 3 }),
+      remaining: remainingNum.toLocaleString('vi-VN', { minimumFractionDigits: isSubset ? 1 : 3, maximumFractionDigits: isSubset ? 1 : 3 }),
       avgRate,
       lowDeptsCount,
       metTargetCount

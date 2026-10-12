@@ -7,15 +7,16 @@ import {
   ArrowRightOutlined,
   ReloadOutlined
 } from '@ant-design/icons';
-import { useApp, HUNG_YEN_OFFICE_LEADERS } from '../../context/AppContext';
+import { useApp, HUNG_YEN_PROVINCE_LEADERS, HUNG_YEN_OFFICE_LEADERS } from '../../context/AppContext';
 
 export const LoginPage: React.FC = () => {
   const { login } = useApp();
-  const [selectedLeaderId, setSelectedLeaderId] = useState<string>('leader-dgd');
+  const allLeaders = [...HUNG_YEN_PROVINCE_LEADERS, ...HUNG_YEN_OFFICE_LEADERS];
+  const [selectedLeaderId, setSelectedLeaderId] = useState<string>('leader-nmq');
   const [isCaptchaChecked, setIsCaptchaChecked] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const currentLeader = HUNG_YEN_OFFICE_LEADERS.find(l => l.id === selectedLeaderId) || HUNG_YEN_OFFICE_LEADERS[0];
+  const currentLeader = allLeaders.find(l => l.id === selectedLeaderId) || HUNG_YEN_PROVINCE_LEADERS[0];
 
   const handleLeaderChange = (id: string) => {
     setSelectedLeaderId(id);
@@ -151,35 +152,66 @@ export const LoginPage: React.FC = () => {
             marginBottom: 18
           }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#0369a1', marginBottom: 6 }}>
-              👤 Chọn tài khoản Lãnh đạo Văn phòng UBND tỉnh:
+              👤 Chọn tài khoản Lãnh đạo UBND tỉnh / Văn phòng UBND tỉnh:
             </div>
             <Select
               value={selectedLeaderId}
               onChange={handleLeaderChange}
               style={{ width: '100%' }}
-              options={HUNG_YEN_OFFICE_LEADERS.map(leader => ({
-                value: leader.id,
-                label: (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ 
-                      width: 22, 
-                      height: 22, 
-                      borderRadius: '50%', 
-                      background: '#0b74e5', 
-                      color: '#ffffff', 
-                      fontSize: 10, 
-                      fontWeight: 700,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      {leader.avatarText}
-                    </span>
-                    <span style={{ fontWeight: 600 }}>{leader.name}</span>
-                    <span style={{ fontSize: 11, color: '#64748b' }}>({leader.title})</span>
-                  </div>
-                )
-              }))}
+              options={[
+                {
+                  label: '🏛️ LÃNH ĐẠO UBND TỈNH HƯNG YÊN',
+                  options: HUNG_YEN_PROVINCE_LEADERS.map(leader => ({
+                    value: leader.id,
+                    label: (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ 
+                          width: 22, 
+                          height: 22, 
+                          borderRadius: '50%', 
+                          background: '#073872', 
+                          color: '#ffffff', 
+                          fontSize: 10, 
+                          fontWeight: 700,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          {leader.avatarText}
+                        </span>
+                        <span style={{ fontWeight: 700, color: '#073872' }}>{leader.name}</span>
+                        <span style={{ fontSize: 11, color: '#64748b' }}>({leader.title})</span>
+                      </div>
+                    )
+                  }))
+                },
+                {
+                  label: '🏢 LÃNH ĐẠO VĂN PHÒNG UBND TỈNH',
+                  options: HUNG_YEN_OFFICE_LEADERS.map(leader => ({
+                    value: leader.id,
+                    label: (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ 
+                          width: 22, 
+                          height: 22, 
+                          borderRadius: '50%', 
+                          background: '#0b74e5', 
+                          color: '#ffffff', 
+                          fontSize: 10, 
+                          fontWeight: 700,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          {leader.avatarText}
+                        </span>
+                        <span style={{ fontWeight: 600 }}>{leader.name}</span>
+                        <span style={{ fontSize: 11, color: '#64748b' }}>({leader.title})</span>
+                      </div>
+                    )
+                  }))
+                }
+              ]}
             />
           </div>
 
@@ -193,7 +225,7 @@ export const LoginPage: React.FC = () => {
                 size="large"
                 prefix={<UserOutlined style={{ color: '#94a3b8', marginRight: 6 }} />}
                 suffix={<CheckCircleFilled style={{ color: '#16a34a', fontSize: 16 }} />}
-                value={`${currentLeader.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/\s+/g, '')}.vp`}
+                value={`${currentLeader.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/\s+/g, '')}${currentLeader.department.includes('Văn phòng') ? '.vp' : '.ubnd'}`}
                 readOnly
                 style={{
                   background: '#f8fafc',

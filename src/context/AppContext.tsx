@@ -42,6 +42,57 @@ interface AppContextType {
   setGuideModalOpen: (open: boolean) => void;
 }
 
+export const HUNG_YEN_PROVINCE_LEADERS: UserProfile[] = [
+  {
+    id: 'leader-nmq',
+    name: 'Nguyễn Mạnh Quyền',
+    title: 'Chủ tịch UBND tỉnh',
+    department: 'UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'NMQ'
+  },
+  {
+    id: 'leader-nlh',
+    name: 'Nguyễn Lê Huy',
+    title: 'Phó Chủ tịch UBND tỉnh',
+    department: 'UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'NLH'
+  },
+  {
+    id: 'leader-lqh',
+    name: 'Lê Quang Hòa',
+    title: 'Phó Chủ tịch UBND tỉnh',
+    department: 'UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'LQH'
+  },
+  {
+    id: 'leader-pvn',
+    name: 'Phạm Văn Nghiêm',
+    title: 'Phó Chủ tịch UBND tỉnh',
+    department: 'UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'PVN'
+  },
+  {
+    id: 'leader-nhn',
+    name: 'Nguyễn Hùng Nam',
+    title: 'Phó Chủ tịch UBND tỉnh',
+    department: 'UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'NHN'
+  },
+  {
+    id: 'leader-lvh',
+    name: 'Lại Văn Hoàn',
+    title: 'Phó Chủ tịch UBND tỉnh',
+    department: 'UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'LVH'
+  }
+];
+
 export const HUNG_YEN_OFFICE_LEADERS: UserProfile[] = [
   {
     id: 'leader-dgd',
@@ -102,7 +153,7 @@ const DEFAULT_FILTERS: GlobalFilterState = {
 };
 
 const USER_PROFILES: Record<UserRole, UserProfile> = {
-  LEADER_PROVINCE: HUNG_YEN_OFFICE_LEADERS[0],
+  LEADER_PROVINCE: HUNG_YEN_PROVINCE_LEADERS[0],
   LEADER_DEPT: {
     id: 'user-02',
     name: 'Nguyễn Văn Nam',
@@ -279,7 +330,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         // ignore
       }
     }
-    return HUNG_YEN_OFFICE_LEADERS[0];
+    return HUNG_YEN_PROVINCE_LEADERS[0];
   });
 
   const [filters, setFilters] = useState<GlobalFilterState>(DEFAULT_FILTERS);
@@ -290,7 +341,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [guideModalOpen, setGuideModalOpen] = useState(false);
 
   const login = (userProfile?: UserProfile) => {
-    const selectedUser = userProfile || HUNG_YEN_OFFICE_LEADERS[0];
+    const selectedUser = userProfile || HUNG_YEN_PROVINCE_LEADERS[0];
     setUserState(selectedUser);
     setRoleState(selectedUser.role);
     setIsAuthenticated(true);
@@ -308,7 +359,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setRoleState(newRole);
     // Adjust default scope and department filter based on 2-tier role
     if (newRole === 'LEADER_PROVINCE') {
-      setUserState(HUNG_YEN_OFFICE_LEADERS[0]);
+      setUserState(HUNG_YEN_PROVINCE_LEADERS[0]);
       setFilters(prev => ({ ...prev, scope: 'ALL', department: 'ALL' }));
     } else {
       setUserState(USER_PROFILES[newRole]);

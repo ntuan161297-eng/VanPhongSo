@@ -19,7 +19,7 @@ import {
   ExclamationCircleFilled,
   InfoCircleFilled
 } from '@ant-design/icons';
-import { useApp, HUNG_YEN_OFFICE_LEADERS, NotificationItem, NotificationCategory } from '../../context/AppContext';
+import { useApp, HUNG_YEN_PROVINCE_LEADERS, HUNG_YEN_OFFICE_LEADERS, NotificationItem, NotificationCategory } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
 export const AppHeader: React.FC = () => {
@@ -379,12 +379,62 @@ export const AppHeader: React.FC = () => {
       label: 'Chuyển vai trò điều hành',
       children: [
         {
+          key: 'role-province-leaders',
+          label: '🏛️ Lãnh đạo UBND Tỉnh',
+          children: HUNG_YEN_PROVINCE_LEADERS.map((leader) => ({
+            key: `prov-leader-${leader.id}`,
+            label: (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 2px', minWidth: 250 }}>
+                <span style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  width: 28, 
+                  height: 28, 
+                  borderRadius: '50%', 
+                  background: user.name === leader.name ? '#073872' : '#dbeafe', 
+                  color: user.name === leader.name ? '#ffffff' : '#073872', 
+                  fontSize: 11, 
+                  fontWeight: 700,
+                  flexShrink: 0
+                }}>
+                  {leader.avatarText}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ 
+                    fontWeight: user.name === leader.name ? 700 : 600, 
+                    color: user.name === leader.name ? '#073872' : '#0f172a',
+                    fontSize: 13,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <span>{leader.name}</span>
+                    {user.name === leader.name && (
+                      <Tag color="blue" style={{ fontSize: 10, padding: '0 6px', margin: 0, borderRadius: 10 }}>
+                        Đang chọn
+                      </Tag>
+                    )}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 1 }}>
+                    {leader.title}
+                  </div>
+                </div>
+              </div>
+            ),
+            onClick: () => {
+              setUser(leader);
+              message.success(`Đã chuyển vai trò điều hành: ${leader.name} - ${leader.title}`);
+            }
+          }))
+        },
+        {
           key: 'role-office-leaders',
-          label: '🏛️ Lãnh đạo Văn phòng UBND Tỉnh',
+          label: '🏢 Lãnh đạo Văn phòng UBND Tỉnh',
           children: HUNG_YEN_OFFICE_LEADERS.map((leader) => ({
             key: `office-leader-${leader.id}`,
             label: (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 2px', minWidth: 240 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 2px', minWidth: 250 }}>
                 <span style={{ 
                   display: 'inline-flex', 
                   alignItems: 'center', 
