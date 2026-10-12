@@ -134,34 +134,9 @@ export const BudgetDashboard: React.FC = () => {
             </div>
             <div>
               <div style={{ fontWeight: 700, color: '#166534' }}>Tích hợp IOC Tỉnh Hưng Yên</div>
-              <div style={{ color: '#15803d', fontSize: 11 }}>Nguồn: <strong>Tabmis & Sở Tài chính (Trực quan + Iframe)</strong></div>
+              <div style={{ color: '#15803d', fontSize: 11 }}>Nguồn: <strong>Tabmis & Sở Tài chính</strong></div>
             </div>
           </div>
-
-          <Space size={6}>
-            <Button 
-              size="middle" 
-              type="primary"
-              style={{ background: '#0b74e5', fontWeight: 600 }}
-              onClick={() => navigate('/ngan-sach/thu')}
-            >
-              🖥️ Màn hình Thu NS (Ảnh 1)
-            </Button>
-            <Button 
-              size="middle" 
-              style={{ fontWeight: 600, borderColor: '#0284c7', color: '#0284c7' }}
-              onClick={() => navigate('/ngan-sach/chi')}
-            >
-              🖥️ Màn hình Chi NS (Ảnh 2)
-            </Button>
-            <Button 
-              size="middle" 
-              style={{ fontWeight: 600, borderColor: '#10b981', color: '#10b981' }}
-              onClick={() => navigate('/giai-ngan')}
-            >
-              🏛️ Màn hình ĐTC (Ảnh 3)
-            </Button>
-          </Space>
         </div>
       </div>
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
+import { useApp } from '../context/AppContext';
+import { LoginPage } from '../features/auth/LoginPage';
 
 // Features
 import { TaskDashboard } from '../features/tasks/TaskDashboard';
@@ -14,8 +16,20 @@ import { BudgetRevenuePage } from '../features/budget/BudgetRevenuePage';
 import { BudgetExpensePage } from '../features/budget/BudgetExpensePage';
 
 export const AppRoutes: React.FC = () => {
+  const { isAuthenticated } = useApp();
+
+  if (!isAuthenticated) {
+    return (
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<LoginPage />} />
+      </Routes>
+    );
+  }
+
   return (
     <Routes>
+      <Route path="/login" element={<Navigate to="/nhiem-vu/dashboard" replace />} />
       <Route path="/" element={<AppLayout />}>
         {/* Default route redirect to Nhiệm vụ Dashboard */}
         <Route index element={<Navigate to="/nhiem-vu/dashboard" replace />} />

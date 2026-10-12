@@ -10,6 +10,9 @@ interface NotificationItem {
 }
 
 interface AppContextType {
+  isAuthenticated: boolean;
+  login: (userProfile?: UserProfile) => void;
+  logout: () => void;
   role: UserRole;
   user: UserProfile;
   setRole: (role: UserRole) => void;
@@ -150,14 +153,44 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return sessionStorage.getItem('van_phong_so_auth') === 'true';
+  });
+
   const [role, setRoleState] = useState<UserRole>('LEADER_PROVINCE');
-  const [user, setUserState] = useState<UserProfile>(HUNG_YEN_OFFICE_LEADERS[0]);
+  const [user, setUserState] = useState<UserProfile>(() => {
+    const savedUser = sessionStorage.getItem('van_phong_so_user');
+    if (savedUser) {
+      try {
+        return JSON.parse(savedUser);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return HUNG_YEN_OFFICE_LEADERS[0];
+  });
+
   const [filters, setFilters] = useState<GlobalFilterState>(DEFAULT_FILTERS);
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const [guideModalOpen, setGuideModalOpen] = useState(false);
+
+  const login = (userProfile?: UserProfile) => {
+    const selectedUser = userProfile || HUNG_YEN_OFFICE_LEADERS[0];
+    setUserState(selectedUser);
+    setRoleState(selectedUser.role);
+    setIsAuthenticated(true);
+    sessionStorage.setItem('van_phong_so_auth', 'true');
+    sessionStorage.setItem('van_phong_so_user', JSON.stringify(selectedUser));
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem('van_phong_so_auth');
+    sessionStorage.removeItem('van_phong_so_user');
+  };
 
   const setRole = (newRole: UserRole) => {
     setRoleState(newRole);
@@ -181,6 +214,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setUserState(newUser);
     setRoleState(newUser.role);
     setFilters(prev => ({ ...prev, scope: 'ALL', department: 'ALL' }));
+    sessionStorage.setItem('van_phong_so_user', JSON.stringify(newUser));
   };
 
   const resetFilters = () => {
@@ -200,6 +234,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   return (
     <AppContext.Provider
       value={{
+        isAuthenticated,
+        login,
+        logout,
         role,
         user,
         setRole,

@@ -21,6 +21,7 @@ export const AppHeader: React.FC = () => {
     role, 
     setRole, 
     setUser,
+    logout,
     notifications, 
     markNotificationAsRead,
     setReportModalOpen,
@@ -185,8 +186,11 @@ export const AppHeader: React.FC = () => {
       key: 'logout',
       icon: <LogoutOutlined />,
       danger: true,
-      label: 'Đăng xuất demo',
-      onClick: () => alert('Đã đăng xuất phiên demo Văn phòng số tỉnh Hưng Yên!')
+      label: 'Đăng xuất',
+      onClick: () => {
+        logout();
+        message.info('Đã đăng xuất khỏi hệ thống Văn phòng số tỉnh Hưng Yên');
+      }
     }
   ];
 
