@@ -151,7 +151,7 @@ export const IOCRevenueFrame: React.FC<IOCRevenueFrameProps> = ({
             value={viewMode}
             onChange={(val) => setViewMode(val as any)}
             options={[
-              { value: 'NATIVE', label: <span><AppstoreOutlined /> Giao diện chuẩn ảnh</span> },
+              { value: 'NATIVE', label: <span><AppstoreOutlined /> Giao diện IOC</span> },
               { value: 'IFRAME', label: <span><LinkOutlined /> Nhúng Iframe Live</span> }
             ]}
             style={{ background: '#0b1120', color: '#cbd5e1' }}
@@ -211,7 +211,7 @@ export const IOCRevenueFrame: React.FC<IOCRevenueFrameProps> = ({
       ) : (
         /* NATIVE VIEW - TÁI LẬP 100% GIAO DIỆN THEO ẢNH 1 */
         <div style={{ padding: '16px 20px', background: '#0e1424' }}>
-          {/* Header IOC chuẩn ảnh 1 */}
+          {/* Header IOC Tỉnh */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               {/* Quốc huy */}
