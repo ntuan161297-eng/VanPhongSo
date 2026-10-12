@@ -13,6 +13,7 @@ interface AppContextType {
   role: UserRole;
   user: UserProfile;
   setRole: (role: UserRole) => void;
+  setUser: (user: UserProfile) => void;
   filters: GlobalFilterState;
   setFilters: React.Dispatch<React.SetStateAction<GlobalFilterState>>;
   resetFilters: () => void;
@@ -28,6 +29,57 @@ interface AppContextType {
   setGuideModalOpen: (open: boolean) => void;
 }
 
+export const HUNG_YEN_OFFICE_LEADERS: UserProfile[] = [
+  {
+    id: 'leader-dgd',
+    name: 'Đinh Gia Dũng',
+    title: 'Chánh Văn phòng UBND tỉnh',
+    department: 'Văn phòng UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'DGD'
+  },
+  {
+    id: 'leader-nqt',
+    name: 'Nguyễn Quang Trung',
+    title: 'Phó Chánh Văn phòng UBND tỉnh',
+    department: 'Văn phòng UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'NQT'
+  },
+  {
+    id: 'leader-ndh',
+    name: 'Nguyễn Đức Huỳnh',
+    title: 'Phó Chánh Văn phòng UBND tỉnh',
+    department: 'Văn phòng UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'NDH'
+  },
+  {
+    id: 'leader-nvd',
+    name: 'Nguyễn Văn Dực',
+    title: 'Phó Chánh Văn phòng UBND tỉnh',
+    department: 'Văn phòng UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'NVD'
+  },
+  {
+    id: 'leader-nxp',
+    name: 'Nguyễn Xuân Phương',
+    title: 'Phó Chánh Văn phòng UBND tỉnh',
+    department: 'Văn phòng UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'NXP'
+  },
+  {
+    id: 'leader-lat',
+    name: 'Lê Anh Tuấn',
+    title: 'Phó Chánh Văn phòng UBND tỉnh',
+    department: 'Văn phòng UBND tỉnh Hưng Yên',
+    role: 'LEADER_PROVINCE',
+    avatarText: 'LAT'
+  }
+];
+
 const DEFAULT_FILTERS: GlobalFilterState = {
   year: 2026,
   period: 'ALL',
@@ -37,14 +89,7 @@ const DEFAULT_FILTERS: GlobalFilterState = {
 };
 
 const USER_PROFILES: Record<UserRole, UserProfile> = {
-  LEADER_PROVINCE: {
-    id: 'user-01',
-    name: 'Đinh Gia Dũng',
-    title: 'Chánh Văn phòng UBND tỉnh',
-    department: 'Văn phòng UBND tỉnh Hưng Yên',
-    role: 'LEADER_PROVINCE',
-    avatarText: 'DGD'
-  },
+  LEADER_PROVINCE: HUNG_YEN_OFFICE_LEADERS[0],
   LEADER_DEPT: {
     id: 'user-02',
     name: 'Nguyễn Văn Nam',
@@ -106,6 +151,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRoleState] = useState<UserRole>('LEADER_PROVINCE');
+  const [user, setUserState] = useState<UserProfile>(HUNG_YEN_OFFICE_LEADERS[0]);
   const [filters, setFilters] = useState<GlobalFilterState>(DEFAULT_FILTERS);
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
@@ -116,13 +162,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const setRole = (newRole: UserRole) => {
     setRoleState(newRole);
     // Adjust default scope and department filter based on 2-tier role
-    if (newRole === 'LEADER_DEPT') {
-      setFilters(prev => ({ ...prev, scope: 'PROVINCIAL_DEPT', department: 'Sở Xây dựng' }));
-    } else if (newRole === 'LEADER_COMMUNE') {
-      setFilters(prev => ({ ...prev, scope: 'COMMUNE', department: 'UBND Xã Văn Giang' }));
-    } else {
+    if (newRole === 'LEADER_PROVINCE') {
+      setUserState(HUNG_YEN_OFFICE_LEADERS[0]);
       setFilters(prev => ({ ...prev, scope: 'ALL', department: 'ALL' }));
+    } else {
+      setUserState(USER_PROFILES[newRole]);
+      if (newRole === 'LEADER_DEPT') {
+        setFilters(prev => ({ ...prev, scope: 'PROVINCIAL_DEPT', department: 'Sở Xây dựng' }));
+      } else if (newRole === 'LEADER_COMMUNE') {
+        setFilters(prev => ({ ...prev, scope: 'COMMUNE', department: 'UBND Xã Văn Giang' }));
+      } else {
+        setFilters(prev => ({ ...prev, scope: 'ALL', department: 'ALL' }));
+      }
     }
+  };
+
+  const setUser = (newUser: UserProfile) => {
+    setUserState(newUser);
+    setRoleState(newUser.role);
+    setFilters(prev => ({ ...prev, scope: 'ALL', department: 'ALL' }));
   };
 
   const resetFilters = () => {
@@ -143,8 +201,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     <AppContext.Provider
       value={{
         role,
-        user: USER_PROFILES[role],
+        user,
         setRole,
+        setUser,
         filters,
         setFilters,
         resetFilters,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Badge, Popover, Dropdown, MenuProps, Input, Tag } from 'antd';
+import { Badge, Popover, Dropdown, MenuProps, Input, Tag, message } from 'antd';
 import { 
   BellOutlined, 
   SearchOutlined, 
@@ -8,10 +8,11 @@ import {
   QuestionCircleOutlined, 
   SettingOutlined, 
   SafetyCertificateOutlined, 
-  LogoutOutlined,
-  SwapOutlined
+  LogoutOutlined, 
+  SwapOutlined,
+  CheckOutlined
 } from '@ant-design/icons';
-import { useApp } from '../../context/AppContext';
+import { useApp, HUNG_YEN_OFFICE_LEADERS } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
 export const AppHeader: React.FC = () => {
@@ -19,6 +20,7 @@ export const AppHeader: React.FC = () => {
     user, 
     role, 
     setRole, 
+    setUser,
     notifications, 
     markNotificationAsRead,
     setReportModalOpen,
@@ -79,24 +81,78 @@ export const AppHeader: React.FC = () => {
       label: 'Chuyển vai trò điều hành',
       children: [
         {
-          key: 'role-1',
-          label: '👑 Chánh Văn phòng UBND tỉnh',
-          onClick: () => setRole('LEADER_PROVINCE')
+          key: 'role-office-leaders',
+          label: '🏛️ Lãnh đạo Văn phòng UBND Tỉnh',
+          children: HUNG_YEN_OFFICE_LEADERS.map((leader) => ({
+            key: `office-leader-${leader.id}`,
+            label: (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 2px', minWidth: 240 }}>
+                <span style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  width: 28, 
+                  height: 28, 
+                  borderRadius: '50%', 
+                  background: user.name === leader.name ? '#0b74e5' : '#e2e8f0', 
+                  color: user.name === leader.name ? '#ffffff' : '#334155', 
+                  fontSize: 11, 
+                  fontWeight: 700,
+                  flexShrink: 0
+                }}>
+                  {leader.avatarText}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ 
+                    fontWeight: user.name === leader.name ? 700 : 600, 
+                    color: user.name === leader.name ? '#0b74e5' : '#0f172a',
+                    fontSize: 13,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <span>{leader.name}</span>
+                    {user.name === leader.name && (
+                      <Tag color="blue" style={{ fontSize: 10, padding: '0 6px', margin: 0, borderRadius: 10 }}>
+                        Đang chọn
+                      </Tag>
+                    )}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 1 }}>
+                    {leader.title}
+                  </div>
+                </div>
+              </div>
+            ),
+            onClick: () => {
+              setUser(leader);
+              message.success(`Đã chuyển vai trò điều hành: ${leader.name} - ${leader.title}`);
+            }
+          }))
         },
         {
           key: 'role-2',
           label: '🏛️ Lãnh đạo Sở/Ngành',
-          onClick: () => setRole('LEADER_DEPT')
+          onClick: () => {
+            setRole('LEADER_DEPT');
+            message.info('Đã chuyển sang vai trò: Lãnh đạo Sở/Ngành');
+          }
         },
         {
           key: 'role-3',
           label: '🏘️ Lãnh đạo UBND Xã/Phường',
-          onClick: () => setRole('LEADER_COMMUNE')
+          onClick: () => {
+            setRole('LEADER_COMMUNE');
+            message.info('Đã chuyển sang vai trò: Lãnh đạo UBND Xã/Phường');
+          }
         },
         {
           key: 'role-4',
           label: '📋 Chuyên viên Tổng hợp',
-          onClick: () => setRole('SPECIALIST')
+          onClick: () => {
+            setRole('SPECIALIST');
+            message.info('Đã chuyển sang vai trò: Chuyên viên Tổng hợp');
+          }
         }
       ]
     },
