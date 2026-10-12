@@ -545,19 +545,19 @@ export const AppHeader: React.FC = () => {
     <header 
       className="app-header"
       style={{
-        height: 60,
-        background: 'linear-gradient(90deg, #073872 0%, #0b4991 42%, #0e54a4 100%)',
+        height: 56,
+        background: '#123B5D',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 24px',
+        padding: '0 20px',
         position: 'relative',
-        boxShadow: '0 2px 10px rgba(7, 40, 80, 0.3)',
+        boxShadow: '0 2px 8px rgba(18, 59, 93, 0.25)',
         zIndex: 100,
         overflow: 'hidden'
       }}
     >
-      {/* Background Historic Watermark Graphic: Cầu Hưng Hà / Yên Lệnh, Chùa Chuông Phố Hiến, Sóng sông Hồng & Mây cổ ("Phần họa tiết phía trên cùng") */}
+      {/* Background Historic Watermark Graphic: Cầu Hưng Hà / Yên Lệnh, Chùa Chuông Phố Hiến, Sóng sông Hồng & Mây cổ */}
       <div 
         className="header-watermark"
         style={{
@@ -570,7 +570,7 @@ export const AppHeader: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
           pointerEvents: 'none',
-          opacity: 0.28,
+          opacity: 0.10,
           zIndex: 1,
           overflow: 'hidden'
         }}
@@ -680,7 +680,7 @@ export const AppHeader: React.FC = () => {
             className="header-emblem-text-title"
             style={{ 
               color: '#ffffff', 
-              fontSize: 19, 
+              fontSize: 18, 
               fontWeight: 800, 
               letterSpacing: '-0.01em',
               display: 'flex',
@@ -691,34 +691,38 @@ export const AppHeader: React.FC = () => {
             }}
           >
             VĂN PHÒNG SỐ
-            <span style={{ 
-              fontSize: 10, 
-              background: '#034a8c', 
-              border: '1px solid #1e88e5',
-              color: '#ffffff', 
-              padding: '1px 6px', 
-              borderRadius: 4,
-              fontWeight: 700,
-              letterSpacing: '0.04em'
-            }}>
-              DEMO
-            </span>
+            <Tag 
+              style={{ 
+                background: 'rgba(255, 255, 255, 0.12)', 
+                border: '1px solid rgba(255, 255, 255, 0.22)', 
+                color: '#e2e8f0', 
+                borderRadius: 12, 
+                fontSize: 11, 
+                fontWeight: 600, 
+                margin: 0,
+                padding: '0 8px',
+                height: 20,
+                lineHeight: '18px'
+              }}
+            >
+              {user.title}
+            </Tag>
           </div>
         </div>
       </div>
 
       {/* Right: Search Pill, Bell with 3 badge, User Avatar & Name */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, zIndex: 2, flexShrink: 0 }}>
-        {/* Search input in pill shape matching image */}
-        <div className="header-search-container" style={{ width: 260 }}>
+        {/* Search input in pill shape */}
+        <div className="header-search-container" style={{ width: 250 }}>
           <Input
             placeholder="Tìm kiếm nhiệm vụ, dự án, văn bản..."
             prefix={<SearchOutlined style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 13, marginRight: 4 }} />}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             style={{
-              background: 'rgba(255, 255, 255, 0.14)',
-              borderColor: 'rgba(255, 255, 255, 0.25)',
+              background: 'rgba(255, 255, 255, 0.12)',
+              borderColor: 'rgba(255, 255, 255, 0.22)',
               borderRadius: 20,
               color: '#ffffff',
               fontSize: 12.5,
@@ -753,13 +757,13 @@ export const AppHeader: React.FC = () => {
             }}
             title="Nhắc việc & Thông báo điều hành"
           >
-            <Badge count={unreadCount} size="small" offset={[2, -3]} color="#EF4444">
+            <Badge count={unreadCount} size="small" offset={[2, -3]} color="#D64545">
               <BellOutlined style={{ fontSize: 16, color: '#ffffff' }} />
             </Badge>
           </div>
         </Popover>
 
-        {/* User Account matching image: Light blue circle "TQV" + Name "Trần Quốc Văn" + "Lãnh đạo UBND Tỉnh" */}
+        {/* User Account / Menu Tiện ích */}
         <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
           <div 
             style={{ 
@@ -767,35 +771,38 @@ export const AppHeader: React.FC = () => {
               alignItems: 'center', 
               gap: 8, 
               cursor: 'pointer',
-              padding: '2px 6px 2px 2px',
+              padding: '2px 8px 2px 2px',
               borderRadius: 20,
-              transition: 'background 0.2s',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              transition: 'all 0.2s',
               flexShrink: 0
             }}
+            title="Tài khoản & Tiện ích điều hành"
           >
             <div 
               style={{ 
-                width: 32, 
-                height: 32, 
+                width: 28, 
+                height: 28, 
                 borderRadius: '50%', 
-                background: '#4a90e2', 
+                background: '#1769AA', 
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 700,
-                fontSize: 12,
-                boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
+                fontSize: 11.5,
+                boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                 flexShrink: 0
               }}
             >
               {user.avatarText}
             </div>
             <div className="header-user-text" style={{ textAlign: 'left', lineHeight: 1.25 }}>
-              <div style={{ color: '#ffffff', fontSize: 13, fontWeight: 700 }}>
+              <div style={{ color: '#ffffff', fontSize: 12.5, fontWeight: 700 }}>
                 {user.name}
               </div>
-              <div style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 11, fontWeight: 400 }}>
+              <div style={{ color: 'rgba(255, 255, 255, 0.78)', fontSize: 10.5, fontWeight: 400 }}>
                 {user.title}
               </div>
             </div>

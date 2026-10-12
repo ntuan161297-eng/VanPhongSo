@@ -447,8 +447,8 @@ export const ProjectDashboard: React.FC = () => {
               title="Tổng dự án trọng điểm"
               value={stats.total}
               icon={<Building2 size={16} />}
-              iconBg="#eff6ff"
-              iconColor="#2563eb"
+              iconBg="#E8F2FB"
+              iconColor="#1769AA"
               subText="Dự án động lực cấp tỉnh"
             />
             <KPICard
@@ -462,21 +462,22 @@ export const ProjectDashboard: React.FC = () => {
             <KPICard
               title="Chậm tiến độ"
               value={stats.delayed}
-              valueColor="#ef4444"
+              valueColor="#D64545"
               icon={<AlertTriangle size={16} />}
               iconBg="#fef2f2"
-              iconColor="#ef4444"
+              iconColor="#D64545"
               subText="Vướng mắc GPMB"
               trendText="Cần chỉ đạo"
-              trendColor="#ef4444"
+              trendColor="#D64545"
               highlight={stats.delayed > 0}
+              onClick={() => handleSwitchMode('DELAYED')}
             />
             <KPICard
               title="Đã hoàn thành"
               value={stats.completed}
               icon={<CheckCircle2 size={16} />}
               iconBg="#ecfdf5"
-              iconColor="#10b981"
+              iconColor="#159A75"
               subText="Đưa vào khai thác"
             />
             <KPICard
@@ -494,10 +495,10 @@ export const ProjectDashboard: React.FC = () => {
               unit="tỷ"
               icon={<DollarSign size={16} />}
               iconBg="#f0fdf4"
-              iconColor="#059669"
+              iconColor="#159A75"
               subText={`Đạt ${(Number(stats.totalDisbursed) / Number(stats.totalInvestment) * 100).toFixed(1)}%`}
               trendText="↑ Tiến độ tốt"
-              trendColor="#10b981"
+              trendColor="#159A75"
             />
           </div>
 

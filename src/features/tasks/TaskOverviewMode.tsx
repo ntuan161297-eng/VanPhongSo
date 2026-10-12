@@ -24,6 +24,7 @@ import {
   Eye,
   MoreHorizontal
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { TaskItem } from '../../types';
 import { KPICard } from '../../components/common/KPICard';
 import { ExecutiveBanner } from '../../components/common/ExecutiveBanner';
@@ -44,6 +45,7 @@ export const TaskOverviewMode: React.FC<TaskOverviewModeProps> = ({
   onGoToUrgentMode,
   onSelectDepartmentFilter
 }) => {
+  const navigate = useNavigate();
   // Donut data matching exact numbers from reference image:
   // 37 Đã hoàn thành (29.8%), 38 Đang thực hiện (30.6%), 28 Sắp đến hạn (22.6%), 21 Quá hạn (17.0%)
   const donutData = [
@@ -257,70 +259,80 @@ export const TaskOverviewMode: React.FC<TaskOverviewModeProps> = ({
         <ExecutiveBanner onActionClick={onGoToUrgentMode} />
       </div>
 
-      {/* Row of 7 KPI Cards (Exact layout from image) */}
-      <div className="kpi-grid-7">
+      {/* 4 KPI Chính (Hàng 1 - Nổi bật, rộng rãi, click mở danh sách) */}
+      <div className="kpi-grid-4" style={{ marginBottom: 10 }}>
         <KPICard
           title="Tổng nhiệm vụ"
-          value="124"
-          icon={<Layers size={16} />}
-          iconBg="#eff6ff"
-          iconColor="#2563eb"
+          value={stats.total}
+          icon={<Layers size={18} />}
+          iconBg="#E8F2FB"
+          iconColor="#1769AA"
           subText="Nhiệm vụ UBND tỉnh giao"
+          onClick={() => navigate('/nhiem-vu/can-xu-ly')}
         />
         <KPICard
           title="Đã hoàn thành"
-          value="37"
-          icon={<CheckCircle2 size={16} />}
+          value={stats.completedTotal}
+          icon={<CheckCircle2 size={18} />}
           iconBg="#ecfdf5"
-          iconColor="#10b981"
-          subText="Đạt 29,8%"
+          iconColor="#159A75"
+          subText={`Đạt ${stats.completionRate}%`}
           trendText="↑ +4,2%"
-          trendColor="#10b981"
+          trendColor="#159A75"
+          onClick={() => navigate('/nhiem-vu/da-hoan-thanh')}
         />
         <KPICard
           title="Đang thực hiện"
-          value="37"
-          icon={<Clock size={16} />}
+          value={stats.inProgress}
+          icon={<Clock size={18} />}
           iconBg="#f0f9ff"
           iconColor="#0284c7"
           subText="Trong hạn quy định"
+          onClick={() => navigate('/nhiem-vu/dang-giai-quyet')}
         />
         <KPICard
           title="Quá hạn chưa hoàn thành"
-          value="28"
-          valueColor="#ef4444"
-          icon={<AlertTriangle size={16} />}
+          value={stats.overduePending}
+          valueColor="#D64545"
+          icon={<AlertTriangle size={18} />}
           iconBg="#fef2f2"
-          iconColor="#ef4444"
-          subText="Cần chỉ đạo đôn đốc"
-          trendText="↑ +3"
-          trendColor="#ef4444"
+          iconColor="#D64545"
+          subText="Cần chỉ đạo đôn đốc gấp"
+          trendText="↑ Cần xử lý"
+          trendColor="#D64545"
           highlight
+          onClick={() => navigate('/nhiem-vu/dang-giai-quyet-qua-han')}
         />
+      </div>
+
+      {/* 3 KPI Hỗ trợ (Hàng 2 - Gọn gàng, bổ trợ thông tin) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginBottom: 16 }}>
         <KPICard
           title="Sắp đến hạn"
-          value="12"
-          valueColor="#f59e0b"
+          value={stats.nearDeadline}
+          valueColor="#D99A25"
           icon={<Calendar size={16} />}
           iconBg="#fffbeb"
-          iconColor="#f59e0b"
-          subText="Trong 3-5 ngày"
+          iconColor="#D99A25"
+          subText="Trong 3-5 ngày tới"
+          onClick={() => navigate('/nhiem-vu/can-xu-ly')}
         />
         <KPICard
           title="Chờ phê duyệt"
-          value="11"
+          value={stats.awaitingApproval}
           icon={<Hourglass size={16} />}
           iconBg="#faf5ff"
           iconColor="#8b5cf6"
           subText="Đã nộp báo cáo kết quả"
+          onClick={() => navigate('/nhiem-vu/can-xu-ly')}
         />
         <KPICard
           title="Chưa giao xử lý"
-          value="11"
+          value={stats.unassigned}
           icon={<FolderCheck size={16} />}
           iconBg="#f1f5f9"
           iconColor="#64748b"
-          subText="Chờ phân công"
+          subText="Chờ phân công cán bộ"
         />
       </div>
 

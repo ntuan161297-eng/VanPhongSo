@@ -23,26 +23,39 @@ export const KPICard: React.FC<KPICardProps> = ({
   valueColor,
   unit,
   icon,
-  iconBg = '#EFF6FF',
-  iconColor = '#0b74e5',
+  iconBg = '#E8F2FB',
+  iconColor = '#1769AA',
   subText,
   trendText,
-  trendColor = '#10b981',
+  trendColor = '#159A75',
   onClick,
   highlight = false
 }) => {
   return (
     <div 
-      className="kpi-card"
+      className={`kpi-card ${onClick ? 'kpi-clickable' : ''}`}
       onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      title={onClick ? `${title}: Nhấn để xem danh sách chi tiết` : title}
       style={{
-        borderColor: highlight ? '#fca5a5' : '#e2e8f0',
-        backgroundColor: '#ffffff',
+        borderColor: highlight ? '#fecaca' : '#DCE5EF',
+        backgroundColor: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        minHeight: 110,
-        padding: '12px 14px'
+        minHeight: 112,
+        padding: '12px 14px',
+        borderRadius: 8,
+        cursor: onClick ? 'pointer' : 'default',
+        transition: 'all 0.18s ease-in-out',
+        boxShadow: highlight ? '0 1px 4px rgba(214, 69, 69, 0.08)' : '0 1px 3px rgba(0, 0, 0, 0.03)'
       }}
     >
       {/* Header: Icon on left + Title */}
@@ -62,27 +75,27 @@ export const KPICard: React.FC<KPICardProps> = ({
         >
           {icon}
         </div>
-        <div style={{ fontSize: 12.5, color: '#475569', fontWeight: 600, lineHeight: 1.25 }}>
+        <div style={{ fontSize: 13, color: '#1F2D3D', fontWeight: 600, lineHeight: 1.25 }}>
           {title}
         </div>
       </div>
 
-      {/* Value */}
+      {/* Value (28-32px per prompt section 9) */}
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 6 }}>
         <div style={{ 
-          fontSize: 26, 
-          fontWeight: 800, 
+          fontSize: 28, 
+          fontWeight: 700, 
           lineHeight: 1.1, 
-          color: valueColor || '#0f172a',
+          color: valueColor || '#1F2D3D',
           letterSpacing: '-0.02em'
         }}>
           {value}
         </div>
-        {unit && <span style={{ fontSize: 12, fontWeight: 500, color: '#64748b' }}>{unit}</span>}
+        {unit && <span style={{ fontSize: 12.5, fontWeight: 500, color: '#64748B' }}>{unit}</span>}
       </div>
 
       {/* Subtext and trend */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: '#64748b' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, fontSize: 11.5, color: '#64748B' }}>
         <span>{subText}</span>
         {trendText && (
           <span style={{ color: trendColor, fontWeight: 700, display: 'inline-flex', alignItems: 'center' }}>

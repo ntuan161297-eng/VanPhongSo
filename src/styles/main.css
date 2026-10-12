@@ -1,19 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --header-blue: #154e87;
-  --dark-navy: #0d3862;
-  --navigation-blue: #1C5F99;
-  --active-tab: #0b74e5;
-  --primary-blue: #0b74e5;
-  --page-bg: #F4F7FB;
+  --navy: #123B5D;
+  --header-blue: #123B5D;
+  --dark-navy: #123B5D;
+  --navigation-blue: #123B5D;
+  --primary-blue: #1769AA;
+  --primary-light: #E8F2FB;
+  --active-tab: #1769AA;
+  --page-bg: #F5F7FA;
   --card-bg: #FFFFFF;
-  --border-color: #E2E8F0;
-  --text-main: #1E293B;
+  --border-color: #DCE5EF;
+  --text-main: #1F2D3D;
+  --text-primary: #1F2D3D;
   --text-secondary: #64748B;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
+  --success: #159A75;
+  --warning: #D99A25;
+  --danger: #D64545;
   --purple: #7C3AED;
 }
 
@@ -138,10 +141,10 @@ body {
 }
 
 .parent-tab-item.active {
-  background: #0b74e5;
+  background: var(--primary-blue);
   color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 2px 6px rgba(11, 116, 229, 0.28);
+  box-shadow: 0 2px 6px rgba(23, 105, 170, 0.28);
   z-index: 2;
 }
 
@@ -152,7 +155,7 @@ body {
   gap: 6px;
   padding: 0 20px;
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border-color);
   overflow-x: auto;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
@@ -172,7 +175,7 @@ body {
   padding: 0 16px;
   font-size: 13px;
   font-weight: 500;
-  color: #64748b;
+  color: var(--text-secondary);
   text-decoration: none;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -183,13 +186,13 @@ body {
 }
 
 .sub-tab-item:hover {
-  color: #0b74e5;
+  color: var(--primary-blue);
 }
 
 .sub-tab-item.active {
-  color: #0b74e5;
+  color: var(--primary-blue);
   font-weight: 700;
-  border-bottom: 2px solid #0b74e5;
+  border-bottom: 2px solid var(--primary-blue);
 }
 
 @media (max-width: 768px) {

@@ -12,12 +12,12 @@ export const App: React.FC = () => {
       theme={{
         token: {
           fontFamily: "'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-          colorPrimary: '#0798EB',
-          colorSuccess: '#10B981',
-          colorWarning: '#F59E0B',
-          colorError: '#EF4444',
-          colorInfo: '#0284C7',
-          colorTextBase: '#1E293B',
+          colorPrimary: '#1769AA',
+          colorSuccess: '#159A75',
+          colorWarning: '#D99A25',
+          colorError: '#D64545',
+          colorInfo: '#1769AA',
+          colorTextBase: '#1F2D3D',
           colorBgBase: '#FFFFFF',
           borderRadius: 8,
           fontSize: 13.5
@@ -29,17 +29,17 @@ export const App: React.FC = () => {
             fontWeight: 500
           },
           Table: {
-            headerBg: '#F1F5F9',
-            headerColor: '#1E293B',
+            headerBg: '#F5F7FA',
+            headerColor: '#1F2D3D',
             rowHoverBg: '#F8FAFC',
-            borderColor: '#E2E8F0',
+            borderColor: '#DCE5EF',
             fontSize: 13
           },
           Card: {
             borderRadiusLG: 10
           },
           Segmented: {
-            itemSelectedBg: '#0798EB',
+            itemSelectedBg: '#1769AA',
             itemSelectedColor: '#FFFFFF',
             controlHeight: 36,
             borderRadius: 6
