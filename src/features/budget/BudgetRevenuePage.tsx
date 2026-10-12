@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col, Table, Progress, Tag, Button, message } from 'antd';
+import React, { useState } from 'react';
+import { Row, Col, Table, Progress, Tag, Button, message, Segmented } from 'antd';
 import { 
   ResponsiveContainer, 
   BarChart, 
@@ -17,8 +17,10 @@ import { BudgetService } from '../../services/dataService';
 import { FilterBar } from '../../components/common/FilterBar';
 import { KPICard } from '../../components/common/KPICard';
 import { ExecutiveBanner } from '../../components/common/ExecutiveBanner';
+import { IOCRevenueFrame } from '../../components/ioc/IOCRevenueFrame';
 
 export const BudgetRevenuePage: React.FC = () => {
+  const [activeLayout, setActiveLayout] = useState<'BOTH' | 'IOC_ONLY' | 'DASHBOARD_ONLY'>('BOTH');
   const stats = BudgetService.getStats();
   const monthlyData = BudgetService.getMonthlyData();
   const revenueCats = BudgetService.getRevenueCategories();
@@ -67,32 +69,56 @@ export const BudgetRevenuePage: React.FC = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: 12 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', margin: 0 }}>
-          Thống kê chi tiết thu ngân sách nhà nước
-        </h1>
-        <p style={{ fontSize: 13, color: '#64748b', margin: '2px 0 0 0' }}>
-          Chi tiết thu nội địa, thu xuất nhập khẩu và thu tiền sử dụng đất trên địa bàn toàn tỉnh
-        </p>
+      {/* Page Title & View Mode Selector */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: 14 }}>
+        <div>
+          <h1 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', margin: 0 }}>
+            Thống kê tình hình thu ngân sách nhà nước
+          </h1>
+          <p style={{ fontSize: 13, color: '#64748b', margin: '2px 0 0 0' }}>
+            Nguồn dữ liệu: Hệ thống báo cáo Tabmis & Trung tâm Giám sát Điều hành Thông minh (IOC) tỉnh Hưng Yên
+          </p>
+        </div>
+
+        <div>
+          <Segmented
+            value={activeLayout}
+            onChange={(val) => setActiveLayout(val as any)}
+            options={[
+              { value: 'BOTH', label: '📑 Hiển thị đầy đủ (IOC & Phân tích)' },
+              { value: 'IOC_ONLY', label: '🖥️ Màn hình IOC Tỉnh' },
+              { value: 'DASHBOARD_ONLY', label: '📊 Báo cáo phân tích' }
+            ]}
+            style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: 2, borderRadius: 8, fontWeight: 600 }}
+          />
+        </div>
       </div>
 
-      <FilterBar onExportCSV={handleExportCSV} />
+      {/* KHUNG GIAO DIỆN CHUẨN IOC TỈNH HƯNG YÊN (ẢNH 1 & IFRAME TABMIS) */}
+      {(activeLayout === 'BOTH' || activeLayout === 'IOC_ONLY') && (
+        <IOCRevenueFrame />
+      )}
 
-      {/* Phố Hiến Executive Banner */}
-      <div style={{ marginBottom: 14 }}>
-        <ExecutiveBanner
-          title="Tình hình thu ngân sách nhà nước tỉnh Hưng Yên"
-          summary={`Tổng dự toán thu giao là ${stats.totalRevPlan} tỷ VNĐ. Thực hiện lũy kế đạt ${stats.totalRevActual} tỷ VNĐ (đạt ${stats.revRate}% dự toán HĐND tỉnh giao). Nguồn thu nội địa và thu tiền sử dụng đất tiếp tục duy trì mức tăng trưởng tích cực.`}
-          actionText="Xuất danh mục thu"
-          onActionClick={handleExportCSV}
-          metrics={[
-            { label: 'Dự toán thu', value: `${stats.totalRevPlan} tỷ`, color: '#0f172a' },
-            { label: 'Thực thu', value: `${stats.totalRevActual} tỷ`, subValue: `${stats.revRate}%`, color: '#10b981' },
-            { label: 'Tỷ lệ đạt', value: `${stats.revRate}%`, color: '#0b74e5' },
-            { label: 'Tăng thu', value: '+1.970 tỷ', color: '#059669' }
-          ]}
-        />
-      </div>
+      {/* BỐ CỤC DASHBOARD BÁO CÁO PHÂN TÍCH HIỆN CÓ */}
+      {(activeLayout === 'BOTH' || activeLayout === 'DASHBOARD_ONLY') && (
+        <>
+          <FilterBar onExportCSV={handleExportCSV} />
+
+          {/* Phố Hiến Executive Banner */}
+          <div style={{ marginBottom: 14 }}>
+            <ExecutiveBanner
+              title="Tình hình thu ngân sách nhà nước tỉnh Hưng Yên"
+              summary={`Tổng dự toán thu giao là ${stats.totalRevPlan} tỷ VNĐ. Thực hiện lũy kế đạt ${stats.totalRevActual} tỷ VNĐ (đạt ${stats.revRate}% dự toán HĐND tỉnh giao). Nguồn thu nội địa và thu tiền sử dụng đất tiếp tục duy trì mức tăng trưởng tích cực.`}
+              actionText="Xuất danh mục thu"
+              onActionClick={handleExportCSV}
+              metrics={[
+                { label: 'Dự toán thu', value: `${stats.totalRevPlan} tỷ`, color: '#0f172a' },
+                { label: 'Thực thu', value: `${stats.totalRevActual} tỷ`, subValue: `${stats.revRate}%`, color: '#10b981' },
+                { label: 'Tỷ lệ đạt', value: `${stats.revRate}%`, color: '#0b74e5' },
+                { label: 'Tăng thu', value: '+1.970 tỷ', color: '#059669' }
+              ]}
+            />
+          </div>
 
       {/* 4 KPIs */}
       <div className="kpi-grid-4">
@@ -190,6 +216,8 @@ export const BudgetRevenuePage: React.FC = () => {
         </div>
         <Table dataSource={revenueCats} columns={columns} rowKey="name" pagination={false} size="middle" bordered scroll={{ x: 800 }} />
       </div>
+        </>
+      )}
     </div>
   );
 };

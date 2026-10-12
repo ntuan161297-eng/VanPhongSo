@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Table, Progress, Tag, Button, Space, message } from 'antd';
+import { Row, Col, Table, Progress, Tag, Button, Space, message, Segmented } from 'antd';
 import { 
   ResponsiveContainer, 
   BarChart, 
@@ -31,9 +31,11 @@ import { DisbursementItem } from '../../types';
 import { FilterBar } from '../../components/common/FilterBar';
 import { KPICard } from '../../components/common/KPICard';
 import { ExecutiveBanner } from '../../components/common/ExecutiveBanner';
+import { IOCDisbursementFrame } from '../../components/ioc/IOCDisbursementFrame';
 
 export const DisbursementDashboard: React.FC = () => {
   const { filters } = useApp();
+  const [activeLayout, setActiveLayout] = useState<'BOTH' | 'IOC_ONLY' | 'DASHBOARD_ONLY'>('BOTH');
   const allRecords = DisbursementService.getAll();
   const stats = DisbursementService.getStats(allRecords);
   const monthlyTrends = DisbursementService.getMonthlyTrends();
@@ -194,49 +196,76 @@ export const DisbursementDashboard: React.FC = () => {
   return (
     <div>
       {/* Page Title Bar & Action Buttons */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: 14 }}>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', margin: 0 }}>
-            Tổng quan giải ngân vốn đầu tư công
+            Kế hoạch giải ngân vốn đầu tư công
           </h1>
           <p style={{ fontSize: 13, color: '#64748b', margin: '2px 0 0 0' }}>
-            Giám sát kế hoạch vốn ngân sách nhà nước, tỷ lệ giải ngân Kho bạc và cảnh báo đơn vị chậm tiến độ
+            Nguồn dữ liệu: Sở Tài chính & Trung tâm Điều hành Thông minh (IOC) tỉnh Hưng Yên
           </p>
         </div>
 
-        {/* Action Button Group */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Button
-            type={activeTabMode === 'OVERVIEW' ? 'primary' : 'default'}
-            icon={<Layers size={14} />}
-            onClick={() => setActiveTabMode('OVERVIEW')}
-            style={activeTabMode === 'OVERVIEW' ? { background: '#0b74e5', borderColor: '#0b74e5', fontWeight: 600 } : {}}
-          >
-            Tổng quan & Tiến độ
-          </Button>
-
-          <Button
-            type={activeTabMode === 'DEPT_ANALYSIS' ? 'primary' : 'default'}
-            icon={<Building2 size={14} />}
-            onClick={() => setActiveTabMode('DEPT_ANALYSIS')}
-            style={activeTabMode === 'DEPT_ANALYSIS' ? { background: '#0b74e5', borderColor: '#0b74e5', fontWeight: 600 } : {}}
-          >
-            Phân tích theo ngành
-          </Button>
-
-          <Button
-            type={activeTabMode === 'LOW_RATE' ? 'primary' : 'default'}
-            icon={<AlertCircle size={14} color={activeTabMode === 'LOW_RATE' ? '#ffffff' : '#ef4444'} />}
-            onClick={() => setActiveTabMode('LOW_RATE')}
-            style={activeTabMode === 'LOW_RATE' ? { background: '#ef4444', borderColor: '#ef4444', fontWeight: 600 } : { color: '#ef4444', borderColor: '#fca5a5' }}
-          >
-            Đơn vị giải ngân thấp ({stats.lowDeptsCount})
-          </Button>
+        {/* Layout Switcher */}
+        <div>
+          <Segmented
+            value={activeLayout}
+            onChange={(val) => setActiveLayout(val as any)}
+            options={[
+              { value: 'BOTH', label: '📑 Hiển thị đầy đủ (IOC & Phân tích)' },
+              { value: 'IOC_ONLY', label: '🖥️ Màn hình IOC Tỉnh' },
+              { value: 'DASHBOARD_ONLY', label: '📊 Báo cáo phân tích' }
+            ]}
+            style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: 2, borderRadius: 8, fontWeight: 600 }}
+          />
         </div>
       </div>
 
-      {/* Filter Bar */}
-      <FilterBar onExportCSV={handleExportCSV} />
+      {/* KHUNG GIAO DIỆN CHUẨN IOC TỈNH HƯNG YÊN (ẢNH 3 & IFRAME SỞ TÀI CHÍNH) */}
+      {(activeLayout === 'BOTH' || activeLayout === 'IOC_ONLY') && (
+        <IOCDisbursementFrame />
+      )}
+
+      {/* BỐ CỤC DASHBOARD BÁO CÁO PHÂN TÍCH HIỆN CÓ */}
+      {(activeLayout === 'BOTH' || activeLayout === 'DASHBOARD_ONLY') && (
+        <>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b' }}>
+              📊 Dashboard phân tích tiến độ & chi tiết theo ngành
+            </div>
+            {/* Action Button Group */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Button
+                type={activeTabMode === 'OVERVIEW' ? 'primary' : 'default'}
+                icon={<Layers size={14} />}
+                onClick={() => setActiveTabMode('OVERVIEW')}
+                style={activeTabMode === 'OVERVIEW' ? { background: '#0b74e5', borderColor: '#0b74e5', fontWeight: 600 } : {}}
+              >
+                Tổng quan & Tiến độ
+              </Button>
+
+              <Button
+                type={activeTabMode === 'DEPT_ANALYSIS' ? 'primary' : 'default'}
+                icon={<Building2 size={14} />}
+                onClick={() => setActiveTabMode('DEPT_ANALYSIS')}
+                style={activeTabMode === 'DEPT_ANALYSIS' ? { background: '#0b74e5', borderColor: '#0b74e5', fontWeight: 600 } : {}}
+              >
+                Phân tích theo ngành
+              </Button>
+
+              <Button
+                type={activeTabMode === 'LOW_RATE' ? 'primary' : 'default'}
+                icon={<AlertCircle size={14} color={activeTabMode === 'LOW_RATE' ? '#ffffff' : '#ef4444'} />}
+                onClick={() => setActiveTabMode('LOW_RATE')}
+                style={activeTabMode === 'LOW_RATE' ? { background: '#ef4444', borderColor: '#ef4444', fontWeight: 600 } : { color: '#ef4444', borderColor: '#fca5a5' }}
+              >
+                Đơn vị giải ngân thấp ({stats.lowDeptsCount})
+              </Button>
+            </div>
+          </div>
+
+          {/* Filter Bar */}
+          <FilterBar onExportCSV={handleExportCSV} />
 
       {/* Phố Hiến Executive Banner */}
       <div style={{ marginBottom: 14 }}>
@@ -440,6 +469,8 @@ export const DisbursementDashboard: React.FC = () => {
           scroll={{ x: 1000 }}
         />
       </div>
+        </>
+      )}
     </div>
   );
 };

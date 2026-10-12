@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Row, Col, Table, Progress, Tag, Alert, Button, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { Row, Col, Table, Progress, Tag, Alert, Button, message, Space } from 'antd';
 import { 
   ResponsiveContainer, 
   ComposedChart, 
@@ -23,7 +24,8 @@ import {
   AlertTriangle,
   Scale,
   Layers,
-  CircleDollarSign
+  CircleDollarSign,
+  ExternalLink
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { BudgetService } from '../../services/dataService';
@@ -32,6 +34,7 @@ import { KPICard } from '../../components/common/KPICard';
 import { ExecutiveBanner } from '../../components/common/ExecutiveBanner';
 
 export const BudgetDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const stats = BudgetService.getStats();
   const monthlyData = BudgetService.getMonthlyData();
   const revenueCats = BudgetService.getRevenueCategories();
@@ -112,26 +115,53 @@ export const BudgetDashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* IOC Status Pill with Live Ping */}
-        <div style={{ 
-          background: '#ffffff', 
-          border: '1px solid #fed7aa', 
-          padding: '6px 14px', 
-          borderRadius: 8,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10,
-          fontSize: 12,
-          boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
-        }}>
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ position: 'absolute', width: 10, height: 10, borderRadius: '50%', background: '#f97316', opacity: 0.7, animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite' }} />
-            <Database size={16} color="#ea580c" />
+        {/* IOC Status Pill with Live Indicator & Quick Navigation */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ 
+            background: '#ffffff', 
+            border: '1px solid #bbf7d0', 
+            padding: '6px 14px', 
+            borderRadius: 8,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            fontSize: 12,
+            boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+          }}>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ position: 'absolute', width: 10, height: 10, borderRadius: '50%', background: '#22c55e', opacity: 0.7, animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite' }} />
+              <Database size={16} color="#16a34a" />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, color: '#166534' }}>Tích hợp IOC Tỉnh Hưng Yên</div>
+              <div style={{ color: '#15803d', fontSize: 11 }}>Nguồn: <strong>Tabmis & Sở Tài chính (Trực quan + Iframe)</strong></div>
+            </div>
           </div>
-          <div>
-            <div style={{ fontWeight: 700, color: '#9a3412' }}>Nguồn dữ liệu dự kiến: IOC Tỉnh</div>
-            <div style={{ color: '#c2410c', fontSize: 11 }}>Trạng thái: <strong>Mô phỏng – Chưa kết nối API</strong></div>
-          </div>
+
+          <Space size={6}>
+            <Button 
+              size="middle" 
+              type="primary"
+              style={{ background: '#0b74e5', fontWeight: 600 }}
+              onClick={() => navigate('/ngan-sach/thu')}
+            >
+              🖥️ Màn hình Thu NS (Ảnh 1)
+            </Button>
+            <Button 
+              size="middle" 
+              style={{ fontWeight: 600, borderColor: '#0284c7', color: '#0284c7' }}
+              onClick={() => navigate('/ngan-sach/chi')}
+            >
+              🖥️ Màn hình Chi NS (Ảnh 2)
+            </Button>
+            <Button 
+              size="middle" 
+              style={{ fontWeight: 600, borderColor: '#10b981', color: '#10b981' }}
+              onClick={() => navigate('/giai-ngan')}
+            >
+              🏛️ Màn hình ĐTC (Ảnh 3)
+            </Button>
+          </Space>
         </div>
       </div>
 
