@@ -80,7 +80,7 @@ export const AppHeader: React.FC = () => {
       children: [
         {
           key: 'role-1',
-          label: '👑 Lãnh đạo UBND Tỉnh',
+          label: '👑 Chánh Văn phòng UBND tỉnh',
           onClick: () => setRole('LEADER_PROVINCE')
         },
         {

@@ -152,7 +152,7 @@ export const IOCDisbursementFrame: React.FC<IOCDisbursementFrameProps> = ({
                   </h2>
                   <div style={{ fontSize: 13.5, color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                     <span style={{ fontSize: 14 }}>⊞</span>
-                    <strong>Kế hoạch giải ngân công đầu tư công</strong>
+                    <strong>Kế hoạch giải ngân vốn đầu tư công</strong>
                   </div>
                 </div>
               </div>

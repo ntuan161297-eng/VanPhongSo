@@ -150,18 +150,23 @@ export const DisbursementService = {
   },
 
   getStats: (records: DisbursementItem[]) => {
-    const totalPlan = records.reduce((sum, r) => sum + r.planAmount, 0);
-    const totalDisbursed = records.reduce((sum, r) => sum + r.disbursedAmount, 0);
-    const remaining = totalPlan - totalDisbursed;
-    const avgRate = totalPlan > 0 ? ((totalDisbursed / totalPlan) * 100).toFixed(2) : '0';
+    // Số liệu chuẩn xác 100% từ IOC Trung tâm Điều hành Chỉ số Đầu tư công tỉnh Hưng Yên (Ảnh 3)
+    const primeMinisterPlan = 43452.580; // 43.452.580 triệu
+    const totalPlan = 41325.480;         // 41.325.480 triệu (TTg & HĐND giao)
+    const localPlan = 56385.647;         // 56.385.647 triệu (Địa phương giao)
+    const totalDisbursed = 28446.835;    // 28.446.835 triệu (Đã giải ngân lũy kế)
+    const avgRate = "68.800";            // 68.800%
+    const remaining = (totalPlan - totalDisbursed).toFixed(3); // 12.878,645 tỷ
 
     const lowDeptsCount = records.filter(r => r.status === 'THAP').length;
     const metTargetCount = records.filter(r => r.status === 'DAT_MUC_TIEU').length;
 
     return {
-      totalPlan: totalPlan.toFixed(1),
-      totalDisbursed: totalDisbursed.toFixed(1),
-      remaining: remaining.toFixed(1),
+      primeMinisterPlan: primeMinisterPlan.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+      localPlan: localPlan.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+      totalPlan: totalPlan.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+      totalDisbursed: totalDisbursed.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
+      remaining: Number(remaining).toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
       avgRate,
       lowDeptsCount,
       metTargetCount
@@ -178,24 +183,25 @@ export const BudgetService = {
   getExpenseCategories: () => EXPENSE_CATEGORIES_MOCK,
 
   getStats: () => {
-    const totalRevPlan = BUDGET_MONTHLY_MOCK.reduce((sum, m) => sum + m.revenuePlan, 0);
-    const totalRevActual = BUDGET_MONTHLY_MOCK.reduce((sum, m) => sum + m.revenueActual, 0);
+    // Số liệu chuẩn xác 100% từ Hệ thống Giám sát KT-XH IOC tỉnh Hưng Yên (Ảnh 1 & Ảnh 2)
+    const totalRevPlan = 51800.0;
+    const totalRevActual = 54840.065; // 54.840.065 triệu
     const revRate = ((totalRevActual / totalRevPlan) * 100).toFixed(1);
 
-    const totalExpPlan = BUDGET_MONTHLY_MOCK.reduce((sum, m) => sum + m.expensePlan, 0);
-    const totalExpActual = BUDGET_MONTHLY_MOCK.reduce((sum, m) => sum + m.expenseActual, 0);
+    const totalExpPlan = 66200.0;
+    const totalExpActual = 64333.103; // 64.333.103 triệu
     const expRate = ((totalExpActual / totalExpPlan) * 100).toFixed(1);
 
-    const netDiff = totalRevActual - totalExpActual;
+    const netDiff = totalRevActual - totalExpActual; // -9.493,038 tỷ
 
     return {
       totalRevPlan: totalRevPlan.toLocaleString('vi-VN'),
-      totalRevActual: totalRevActual.toLocaleString('vi-VN'),
+      totalRevActual: totalRevActual.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
       revRate,
       totalExpPlan: totalExpPlan.toLocaleString('vi-VN'),
-      totalExpActual: totalExpActual.toLocaleString('vi-VN'),
+      totalExpActual: totalExpActual.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }),
       expRate,
-      netDiff: netDiff.toLocaleString('vi-VN')
+      netDiff: netDiff.toLocaleString('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 })
     };
   }
 };

@@ -108,14 +108,14 @@ export const BudgetExpensePage: React.FC = () => {
           <div style={{ marginBottom: 14 }}>
             <ExecutiveBanner
               title="Tình hình chi ngân sách nhà nước tỉnh Hưng Yên"
-              summary={`Tổng dự toán chi ngân sách được duyệt là ${stats.totalExpPlan} tỷ VNĐ. Tổng chi thực hiện đạt ${stats.totalExpActual} tỷ VNĐ (tương đương ${stats.expRate}%). Ngân sách đảm bảo đáp ứng đầy đủ nguồn lực cho chi đầu tư phát triển, an sinh xã hội và vận hành chính quyền 2 cấp.`}
+              summary={`Tổng dự toán chi ngân sách được duyệt là ${stats.totalExpPlan} tỷ VNĐ. Tổng chi thực hiện đạt ${stats.totalExpActual} tỷ VNĐ (đạt ${stats.expRate}% dự toán, tương ứng 64.333.103 triệu đồng theo Hệ thống báo cáo Tabmis). Trong đó: Chi đầu tư phát triển đạt 39.659,254 tỷ VNĐ (61.7%) và Chi thường xuyên đạt 24.630,119 tỷ VNĐ (38.3%), bảo đảm nguồn lực cho các dự án trọng điểm và vận hành chính quyền 2 cấp.`}
               actionText="Xuất danh mục chi"
               onActionClick={handleExportCSV}
               metrics={[
                 { label: 'Dự toán chi', value: `${stats.totalExpPlan} tỷ`, color: '#0f172a' },
                 { label: 'Thực chi', value: `${stats.totalExpActual} tỷ`, subValue: `${stats.expRate}%`, color: '#0b74e5' },
-                { label: 'Tỷ lệ giải ngân', value: `${stats.expRate}%`, color: '#10b981' },
-                { label: 'Cân đối chi', value: 'Bảo đảm', color: '#059669' }
+                { label: 'Chi ĐT phát triển', value: '39.659,254 tỷ', color: '#10b981' },
+                { label: 'Chi thường xuyên', value: '24.630,119 tỷ', color: '#059669' }
               ]}
             />
           </div>
@@ -138,7 +138,7 @@ export const BudgetExpensePage: React.FC = () => {
           icon={<ArrowDownRight size={16} />}
           iconBg="#f0f9ff"
           iconColor="#0284c7"
-          subText="Khối lượng đã thanh toán"
+          subText="64.333.103 triệu (Tabmis)"
         />
         <KPICard
           title="Tỷ lệ giải ngân chi"
@@ -149,12 +149,13 @@ export const BudgetExpensePage: React.FC = () => {
           subText="Kiểm soát chi chặt chẽ"
         />
         <KPICard
-          title="Cân đối chi phát triển"
-          value="12.540 tỷ"
+          title="Chi đầu tư phát triển"
+          value="39.659,254"
+          unit="tỷ"
           icon={<CheckCircle2 size={16} />}
           iconBg="#ecfdf5"
           iconColor="#10b981"
-          subText="Chi đầu tư xây dựng cơ bản"
+          subText="Chi XDCB theo Tabmis"
         />
       </div>
 

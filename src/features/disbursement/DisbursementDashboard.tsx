@@ -52,21 +52,23 @@ export const DisbursementDashboard: React.FC = () => {
       remaining: r.remainingAmount
     }));
 
-  // Capital category donut
+  // Phân theo nguồn vốn theo đúng IOC Đầu tư công (Ảnh 3)
   const capitalCategoryData = [
-    { name: 'Vốn Đầu tư phát triển', value: 14930, color: '#0b74e5' },
-    { name: 'Vốn Sự nghiệp', value: 1975, color: '#10b981' },
-    { name: 'Vốn CNTT & CĐS', value: 635, color: '#8b5cf6' }
+    { name: 'Ngân sách địa phương', value: 25865, color: '#ec4899' },
+    { name: 'Cấp tỉnh quản lý', value: 19546, color: '#84cc16' },
+    { name: 'Vốn kéo dài 2025 sang 2026', value: 1328, color: '#06b6d4' },
+    { name: 'Ngân sách Trung ương', value: 468, color: '#e11d48' },
+    { name: 'Cấp xã quản lý', value: 38, color: '#22c55e' }
   ];
 
-  // Plan vs Disbursed per major sector
+  // So sánh Kế hoạch & Thực giải ngân theo cấp/nguồn (Đơn vị: Tỷ VNĐ)
   const comparisonData = [
-    { name: 'Giao thông', plan: 4850, actual: 3680.5 },
-    { name: 'Nông nghiệp & TN', plan: 2290, actual: 1745.2 },
-    { name: 'Xây dựng & Đô thị', plan: 1420, actual: 895.0 },
-    { name: 'Chính quyền 2 cấp', plan: 5470, actual: 4125.0 },
-    { name: 'Giáo dục & Y tế', plan: 1100, actual: 885.0 },
-    { name: 'CNTT & Viễn thông', plan: 320, actual: 245.0 }
+    { name: 'Vốn giao trong năm', plan: 49429.5, actual: 26332.5 },
+    { name: 'NS địa phương', plan: 48899.8, actual: 25864.9 },
+    { name: 'Cấp tỉnh quản lý', plan: 30793.2, actual: 19545.6 },
+    { name: 'Vốn kéo dài 2025-2026', plan: 8406.7, actual: 1327.5 },
+    { name: 'NS trung ương', plan: 529.7, actual: 467.6 },
+    { name: 'Cấp xã quản lý', plan: 41.2, actual: 37.5 }
   ];
 
   const handleExportCSV = () => {
@@ -271,14 +273,14 @@ export const DisbursementDashboard: React.FC = () => {
       <div style={{ marginBottom: 14 }}>
         <ExecutiveBanner
           title="Tình hình giải ngân kế hoạch vốn đầu tư công tỉnh Hưng Yên"
-          summary={`Tổng kế hoạch vốn giao năm 2026 là ${stats.totalPlan} tỷ VNĐ. Toàn tỉnh đã giải ngân đạt ${stats.totalDisbursed} tỷ VNĐ, đạt tỷ lệ ${stats.avgRate}% kế hoạch. Hiện có ${stats.metTargetCount} đơn vị đạt tiến độ xuất sắc, ${stats.lowDeptsCount} đơn vị có tỷ lệ dưới 60% cần lãnh đạo tỉnh chỉ đạo đôn đốc hoàn tất hồ sơ nghiệm thu thanh toán.`}
+          summary={`Kế hoạch vốn ĐTC Thủ tướng Chính phủ và HĐND tỉnh giao là ${stats.totalPlan} tỷ VNĐ (Kế hoạch địa phương giao: ${stats.localPlan} tỷ VNĐ). Lũy kế toàn tỉnh đã giải ngân đạt ${stats.totalDisbursed} tỷ VNĐ, đạt tỷ lệ ${stats.avgRate}% kế hoạch vốn TTg & HĐND giao (tương ứng 28.446.835 triệu đồng theo Sở Tài chính). Số vốn còn lại cần giải ngân là ${stats.remaining} tỷ VNĐ. Lãnh đạo Văn phòng UBND tỉnh đôn đốc các chủ đầu tư, địa phương tập trung tháo gỡ khó khăn và đẩy nhanh nghiệm thu thanh toán.`}
           actionText="Đôn đốc đơn vị chậm"
           onActionClick={() => setActiveTabMode('LOW_RATE')}
           metrics={[
-            { label: 'Kế hoạch vốn', value: `${stats.totalPlan} tỷ`, color: '#0f172a' },
+            { label: 'KH TTg & HĐND', value: `${stats.totalPlan} tỷ`, color: '#0f172a' },
+            { label: 'KH Địa phương', value: `${stats.localPlan} tỷ`, color: '#db2777' },
             { label: 'Đã giải ngân', value: `${stats.totalDisbursed} tỷ`, subValue: `${stats.avgRate}%`, color: '#10b981' },
-            { label: 'Còn lại', value: `${stats.remaining} tỷ`, color: '#ef4444' },
-            { label: 'Đạt mục tiêu', value: stats.metTargetCount, subValue: 'Trên 75%', color: '#0b74e5' }
+            { label: 'Còn lại', value: `${stats.remaining} tỷ`, color: '#ef4444' }
           ]}
         />
       </div>
@@ -286,22 +288,31 @@ export const DisbursementDashboard: React.FC = () => {
       {/* 6 KPI Cards Row */}
       <div className="kpi-grid-6">
         <KPICard
-          title="Tổng kế hoạch vốn"
-          value={Number(stats.totalPlan).toLocaleString('vi-VN')}
+          title="KH TTg & HĐND giao"
+          value={stats.totalPlan}
           unit="tỷ"
           icon={<DollarSign size={16} />}
           iconBg="#eff6ff"
           iconColor="#2563eb"
-          subText="Năm ngân sách 2026"
+          subText="41.325.480 triệu đồng"
+        />
+        <KPICard
+          title="KH địa phương giao"
+          value={stats.localPlan}
+          unit="tỷ"
+          icon={<DollarSign size={16} />}
+          iconBg="#fdf2f8"
+          iconColor="#db2777"
+          subText="56.385.647 triệu đồng"
         />
         <KPICard
           title="Tổng vốn đã giải ngân"
-          value={Number(stats.totalDisbursed).toLocaleString('vi-VN')}
+          value={stats.totalDisbursed}
           unit="tỷ"
           icon={<TrendingUp size={16} />}
           iconBg="#f0fdf4"
           iconColor="#10b981"
-          subText="Kho bạc Nhà nước xác nhận"
+          subText="28.446.835 triệu (Kho bạc)"
         />
         <KPICard
           title="Tỷ lệ giải ngân"
@@ -309,38 +320,31 @@ export const DisbursementDashboard: React.FC = () => {
           icon={<TrendingUp size={16} />}
           iconBg="#eff6ff"
           iconColor="#0284c7"
-          subText="Mục tiêu năm: 95%"
-          trendText="↑ +5.8%"
+          subText="So KH TTg & HĐND giao"
+          trendText="Chuẩn số liệu IOC"
           trendColor="#10b981"
         />
         <KPICard
           title="Số vốn còn lại"
-          value={Number(stats.remaining).toLocaleString('vi-VN')}
+          value={stats.remaining}
           unit="tỷ"
           icon={<DollarSign size={16} />}
           iconBg="#fff7ed"
           iconColor="#ea580c"
-          subText="Cần giải ngân trong kỳ"
+          subText="12.878.645 triệu đồng"
+          trendText="Áp lực QIV"
+          trendColor="#ea580c"
         />
         <KPICard
-          title="Đơn vị đạt mục tiêu"
-          value={stats.metTargetCount}
-          icon={<CheckCircle2 size={16} />}
-          iconBg="#f0fdf4"
-          iconColor="#10b981"
-          subText="Tỷ lệ giải ngân > 75%"
-        />
-        <KPICard
-          title="Đơn vị tỷ lệ thấp"
-          value={stats.lowDeptsCount}
-          valueColor="#ef4444"
-          icon={<AlertCircle size={16} />}
-          iconBg="#fef2f2"
-          iconColor="#ef4444"
-          subText="Tỷ lệ giải ngân < 60%"
-          trendText="Cần xử lý"
-          trendColor="#ef4444"
-          highlight={stats.lowDeptsCount > 0}
+          title="Vốn kéo dài từ 2025"
+          value="8.406,718"
+          unit="tỷ"
+          icon={<Calendar size={16} />}
+          iconBg="#f5f3ff"
+          iconColor="#7c3aed"
+          subText="Đã GN 1.327,5 tỷ (15.8%)"
+          trendText="Nguồn 2025"
+          trendColor="#7c3aed"
         />
       </div>
 

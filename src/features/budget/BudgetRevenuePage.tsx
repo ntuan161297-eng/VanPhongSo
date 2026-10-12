@@ -108,14 +108,14 @@ export const BudgetRevenuePage: React.FC = () => {
           <div style={{ marginBottom: 14 }}>
             <ExecutiveBanner
               title="Tình hình thu ngân sách nhà nước tỉnh Hưng Yên"
-              summary={`Tổng dự toán thu giao là ${stats.totalRevPlan} tỷ VNĐ. Thực hiện lũy kế đạt ${stats.totalRevActual} tỷ VNĐ (đạt ${stats.revRate}% dự toán HĐND tỉnh giao). Nguồn thu nội địa và thu tiền sử dụng đất tiếp tục duy trì mức tăng trưởng tích cực.`}
+              summary={`Tổng dự toán thu giao là ${stats.totalRevPlan} tỷ VNĐ. Thực hiện lũy kế đạt ${stats.totalRevActual} tỷ VNĐ (đạt ${stats.revRate}% dự toán HĐND giao, tương ứng 54.840.065 triệu đồng theo Hệ thống báo cáo Tabmis). Nguồn thu nội địa (45.388,430 tỷ VNĐ) và thu tiền sử dụng đất (19.544,192 tỷ VNĐ) tiếp tục đóng góp chủ đạo vào ngân sách tỉnh.`}
               actionText="Xuất danh mục thu"
               onActionClick={handleExportCSV}
               metrics={[
                 { label: 'Dự toán thu', value: `${stats.totalRevPlan} tỷ`, color: '#0f172a' },
                 { label: 'Thực thu', value: `${stats.totalRevActual} tỷ`, subValue: `${stats.revRate}%`, color: '#10b981' },
-                { label: 'Tỷ lệ đạt', value: `${stats.revRate}%`, color: '#0b74e5' },
-                { label: 'Tăng thu', value: '+1.970 tỷ', color: '#059669' }
+                { label: 'Tiền sử dụng đất', value: '19.544,192 tỷ', color: '#0b74e5' },
+                { label: 'Vượt dự toán', value: '+3.040,065 tỷ', color: '#059669' }
               ]}
             />
           </div>
@@ -138,7 +138,7 @@ export const BudgetRevenuePage: React.FC = () => {
           icon={<ArrowUpRight size={16} />}
           iconBg="#f0fdf4"
           iconColor="#10b981"
-          subText="Kho bạc Nhà nước ghi nhận"
+          subText="54.840.065 triệu (Tabmis)"
           trendText="Vượt chỉ tiêu"
           trendColor="#10b981"
         />
@@ -148,18 +148,18 @@ export const BudgetRevenuePage: React.FC = () => {
           icon={<TrendingUp size={16} />}
           iconBg="#f0fdf4"
           iconColor="#059669"
-          subText="Vượt 6.5% kế hoạch năm"
-          trendText="↑ +6.5%"
+          subText="Vượt 5.9% kế hoạch năm"
+          trendText="↑ +5.9%"
           trendColor="#10b981"
         />
         <KPICard
           title="Thu vượt dự toán"
-          value={`+${(Number(stats.totalRevActual.replace(/\./g, '')) - Number(stats.totalRevPlan.replace(/\./g, ''))).toLocaleString('vi-VN')}`}
+          value="+3.040,065"
           unit="tỷ"
           icon={<CheckCircle2 size={16} />}
           iconBg="#ecfdf5"
           iconColor="#10b981"
-          subText="Tăng thu ngân sách"
+          subText="Tăng thu so với dự toán"
         />
       </div>
 

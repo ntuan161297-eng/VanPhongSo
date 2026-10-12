@@ -39,11 +39,11 @@ const DEFAULT_FILTERS: GlobalFilterState = {
 const USER_PROFILES: Record<UserRole, UserProfile> = {
   LEADER_PROVINCE: {
     id: 'user-01',
-    name: 'Trần Quốc Văn',
-    title: 'Lãnh đạo UBND Tỉnh',
-    department: 'Ủy ban Nhân dân tỉnh Hưng Yên',
+    name: 'Đinh Gia Dũng',
+    title: 'Chánh Văn phòng UBND tỉnh',
+    department: 'Văn phòng UBND tỉnh Hưng Yên',
     role: 'LEADER_PROVINCE',
-    avatarText: 'TQV'
+    avatarText: 'DGD'
   },
   LEADER_DEPT: {
     id: 'user-02',

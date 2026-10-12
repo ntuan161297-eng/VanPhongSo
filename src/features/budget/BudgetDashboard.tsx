@@ -172,13 +172,13 @@ export const BudgetDashboard: React.FC = () => {
       <div style={{ marginBottom: 14 }}>
         <ExecutiveBanner
           title="Tình hình thu - chi ngân sách tỉnh Hưng Yên"
-          summary={`Tổng dự toán thu ngân sách nhà nước năm 2026 là ${stats.totalRevPlan} tỷ VNĐ. Thực hiện thu đạt ${stats.totalRevActual} tỷ VNĐ (vượt dự toán ${stats.revRate}%). Tổng chi ngân sách thực hiện là ${stats.totalExpActual} tỷ VNĐ trên dự toán ${stats.totalExpPlan} tỷ VNĐ, bảo đảm cân đối chi đầu tư phát triển và chi thường xuyên cho bộ máy.`}
+          summary={`Tổng dự toán thu ngân sách nhà nước năm 2026 là ${stats.totalRevPlan} tỷ VNĐ. Thực hiện thu đạt ${stats.totalRevActual} tỷ VNĐ (đạt ${stats.revRate}% dự toán HĐND giao, tương ứng 54.840.065 triệu đồng theo Tabmis). Tổng chi ngân sách thực hiện là ${stats.totalExpActual} tỷ VNĐ (đạt ${stats.expRate}% dự toán), bảo đảm đáp ứng vốn chi đầu tư phát triển (39.659,254 tỷ VNĐ) và chi thường xuyên (24.630,119 tỷ VNĐ) phục vụ bộ máy.`}
           actionText="Xem cơ cấu các khoản thu"
           metrics={[
             { label: 'Dự toán thu', value: `${stats.totalRevPlan} tỷ`, color: '#0f172a' },
             { label: 'Thực thu', value: `${stats.totalRevActual} tỷ`, subValue: `${stats.revRate}%`, color: '#10b981' },
             { label: 'Dự toán chi', value: `${stats.totalExpPlan} tỷ`, color: '#0b74e5' },
-            { label: 'Thực chi', value: `${stats.totalExpActual} tỷ`, subValue: '96.9%', color: '#0284c7' }
+            { label: 'Thực chi', value: `${stats.totalExpActual} tỷ`, subValue: `${stats.expRate}%`, color: '#0284c7' }
           ]}
         />
       </div>
@@ -201,8 +201,8 @@ export const BudgetDashboard: React.FC = () => {
           icon={<ArrowUpRight size={16} />}
           iconBg="#f0fdf4"
           iconColor="#10b981"
-          subText="Lũy kế cả năm (ước)"
-          trendText="↑ Vượt chỉ tiêu"
+          subText="54.840.065 triệu (Tabmis)"
+          trendText="↑ Vượt dự toán"
           trendColor="#10b981"
         />
         <KPICard
@@ -211,8 +211,8 @@ export const BudgetDashboard: React.FC = () => {
           icon={<TrendingUp size={16} />}
           iconBg="#f0fdf4"
           iconColor="#059669"
-          subText="Vượt dự toán HĐND giao"
-          trendText="↑ +6.5%"
+          subText="So dự toán HĐND giao"
+          trendText="↑ Tăng trưởng tốt"
           trendColor="#10b981"
         />
         <KPICard
@@ -231,18 +231,18 @@ export const BudgetDashboard: React.FC = () => {
           icon={<ArrowDownRight size={16} />}
           iconBg="#eff6ff"
           iconColor="#0284c7"
-          subText="Đạt 96.9% dự toán"
+          subText={`Đạt ${stats.expRate}% dự toán`}
         />
         <KPICard
           title="Chênh lệch Thu - Chi*"
-          value={`+${stats.netDiff}`}
+          value={`${stats.netDiff}`}
           unit="tỷ"
           icon={<Scale size={16} />}
           iconBg="#ecfdf5"
-          iconColor="#10b981"
-          subText="*Số liệu dòng tiền điều hành"
-          trendText="Cân đối dương"
-          trendColor="#10b981"
+          iconColor="#0284c7"
+          subText="*Dòng tiền điều hành Tabmis"
+          trendText="Kỳ báo cáo 12/10"
+          trendColor="#0284c7"
         />
       </div>
 

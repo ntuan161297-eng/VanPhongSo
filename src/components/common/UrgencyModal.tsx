@@ -92,22 +92,25 @@ export const UrgencyModal: React.FC<UrgencyModalProps> = ({
         form={form}
         layout="vertical"
         initialValues={{
-          signer: 'Đ/c Trần Quốc Văn - Chủ tịch UBND tỉnh',
+          signer: 'Đ/c Đinh Gia Dũng - Chánh Văn phòng UBND tỉnh',
           urgencyLevel: 'HOA_TOC',
           newDeadline: dayjs().add(5, 'day'),
-          instruction: `Yêu cầu Giám đốc ${task.leadingDept} khẩn trương tập trung chỉ đạo, khắc phục vướng mắc và báo cáo kết quả thực hiện về UBND tỉnh trước thời hạn được giao.`
+          instruction: `Yêu cầu Thủ trưởng ${task.leadingDept} khẩn trương tập trung chỉ đạo, khắc phục vướng mắc và báo cáo kết quả thực hiện về Văn phòng UBND tỉnh trước thời hạn được giao.`
         }}
       >
         <Form.Item
           name="signer"
-          label="Lãnh đạo ký ban hành"
+          label="Lãnh đạo ký ban hành chỉ đạo đôn đốc"
           rules={[{ required: true, message: 'Vui lòng chọn người ký' }]}
         >
           <Select
             options={[
-              { value: 'Đ/c Trần Quốc Văn - Chủ tịch UBND tỉnh', label: 'Đ/c Trần Quốc Văn - Chủ tịch UBND tỉnh' },
-              { value: 'Đ/c Nguyễn Hùng Nam - Phó Chủ tịch UBND tỉnh', label: 'Đ/c Nguyễn Hùng Nam - Phó Chủ tịch UBND tỉnh' },
-              { value: 'Đ/c Nguyễn Lê Huy - Phó Chủ tịch UBND tỉnh', label: 'Đ/c Nguyễn Lê Huy - Phó Chủ tịch UBND tỉnh' }
+              { value: 'Đ/c Đinh Gia Dũng - Chánh Văn phòng UBND tỉnh', label: 'Đ/c Đinh Gia Dũng - Chánh Văn phòng UBND tỉnh' },
+              { value: 'Đ/c Nguyễn Quang Trung - Phó Chánh Văn phòng UBND tỉnh', label: 'Đ/c Nguyễn Quang Trung - Phó Chánh Văn phòng UBND tỉnh' },
+              { value: 'Đ/c Nguyễn Đức Huỳnh - Phó Chánh Văn phòng UBND tỉnh', label: 'Đ/c Nguyễn Đức Huỳnh - Phó Chánh Văn phòng UBND tỉnh' },
+              { value: 'Đ/c Nguyễn Văn Dực - Phó Chánh Văn phòng UBND tỉnh', label: 'Đ/c Nguyễn Văn Dực - Phó Chánh Văn phòng UBND tỉnh' },
+              { value: 'Đ/c Nguyễn Xuân Phương - Phó Chánh Văn phòng UBND tỉnh', label: 'Đ/c Nguyễn Xuân Phương - Phó Chánh Văn phòng UBND tỉnh' },
+              { value: 'Đ/c Lê Anh Tuấn - Phó Chánh Văn phòng UBND tỉnh', label: 'Đ/c Lê Anh Tuấn - Phó Chánh Văn phòng UBND tỉnh' }
             ]}
           />
         </Form.Item>

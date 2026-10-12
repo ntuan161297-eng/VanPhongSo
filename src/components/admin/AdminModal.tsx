@@ -27,7 +27,7 @@ export const AdminModal: React.FC = () => {
   ];
 
   const permissions = [
-    { key: '1', role: 'Lãnh đạo UBND Tỉnh', scope: 'Toàn tỉnh (Xem toàn bộ 4 hợp phần, ban hành đôn đốc khẩn, phê duyệt báo cáo)', access: 'Toàn quyền điều hành cấp tỉnh' },
+    { key: '1', role: 'Lãnh đạo Văn phòng UBND tỉnh', scope: 'Toàn tỉnh (Xem toàn bộ 4 hợp phần, ban hành đôn đốc khẩn, phê duyệt báo cáo)', access: 'Toàn quyền điều hành Văn phòng tỉnh' },
     { key: '2', role: 'Lãnh đạo Sở/Ban/Ngành', scope: 'Phạm vi 10 Sở chuyên môn và các Ban quản lý, đơn vị trực thuộc', access: 'Báo cáo & Giám sát ngành' },
     { key: '3', role: 'Lãnh đạo UBND Xã/Phường', scope: 'Phạm vi xã/phường được giao quản lý theo mô hình chính quyền 2 cấp', access: 'Điều hành & Xử lý cấp cơ sở' },
     { key: '4', role: 'Chuyên viên Tổng hợp', scope: 'Xem tổng hợp số liệu, hỗ trợ tổng hợp và xuất báo cáo định kỳ', access: 'Xem & Khai thác số liệu' }

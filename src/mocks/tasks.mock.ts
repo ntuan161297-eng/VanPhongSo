@@ -12,7 +12,7 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 70,
     status: 'DANG_XU_LY',
     priority: 'KHAN',
-    assignedLeader: 'Chủ tịch UBND tỉnh',
+    assignedLeader: 'Đ/c Đinh Gia Dũng - Chánh VP UBND tỉnh',
     field: 'Khoa học công nghệ & Chuyển đổi số',
     expediteCount: 1,
     history: [
@@ -31,11 +31,11 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 40,
     status: 'SAP_DEN_HAN',
     priority: 'HOA_TOC',
-    assignedLeader: 'Phó Chủ tịch UBND tỉnh',
+    assignedLeader: 'Đ/c Nguyễn Quang Trung - Phó Chánh VP',
     field: 'Tài chính - Kế hoạch đầu tư',
     expediteCount: 2,
     history: [
-      { id: 'h2', date: '20/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo UBND tỉnh', comment: 'Yêu cầu tổng hợp chi tiết kế hoạch vốn từng dự án trọng điểm.' }
+      { id: 'h2', date: '20/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo Văn phòng UBND tỉnh', comment: 'Yêu cầu tổng hợp chi tiết kế hoạch vốn từng dự án trọng điểm.' }
     ],
     relatedDocs: ['Công văn số 342/UBND-KT']
   },
@@ -50,7 +50,7 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 20,
     status: 'QUA_HAN_CHUA_HOAN_THANH',
     priority: 'HOA_TOC',
-    assignedLeader: 'Phó Chủ tịch UBND tỉnh',
+    assignedLeader: 'Đ/c Nguyễn Đức Huỳnh - Phó Chánh VP',
     field: 'Đô thị - Quy hoạch xây dựng',
     expediteCount: 3,
     history: [
@@ -69,7 +69,7 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 10,
     status: 'CHUA_GIAO',
     priority: 'TRUNG_BINH',
-    assignedLeader: 'Chủ tịch UBND tỉnh',
+    assignedLeader: 'Đ/c Nguyễn Văn Dực - Phó Chánh VP',
     field: 'Nông nghiệp & Môi trường',
     expediteCount: 0,
     history: [
@@ -88,11 +88,11 @@ export const FEATURED_TASKS_MOCK: TaskItem[] = [
     progress: 35,
     status: 'DANG_XU_LY',
     priority: 'KHAN',
-    assignedLeader: 'Phó Chủ tịch UBND tỉnh',
+    assignedLeader: 'Đ/c Nguyễn Xuân Phương - Phó Chánh VP',
     field: 'Chính quyền 2 cấp & Cải cách TTHC',
     expediteCount: 1,
     history: [
-      { id: 'h5', date: '12/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo UBND tỉnh', comment: 'Thí điểm mô hình điều hành chính quyền 2 cấp tại 104 xã, phường sau sắp xếp.' }
+      { id: 'h5', date: '12/01/2026', action: 'Giao nhiệm vụ', performer: 'Lãnh đạo Văn phòng UBND tỉnh', comment: 'Thí điểm mô hình điều hành chính quyền 2 cấp tại 104 xã, phường sau sắp xếp.' }
     ],
     relatedDocs: ['Nghị quyết số 1666/NQ-UBTVQH15']
   }
@@ -126,9 +126,12 @@ export const generateTasksMock = (): TaskItem[] => {
   ];
 
   const leaders = [
-    'Chủ tịch UBND tỉnh',
-    'Phó Chủ tịch UBND tỉnh',
-    'Phó Chủ tịch Thường trực UBND tỉnh'
+    'Đ/c Đinh Gia Dũng - Chánh VP UBND tỉnh',
+    'Đ/c Nguyễn Quang Trung - Phó Chánh VP',
+    'Đ/c Nguyễn Đức Huỳnh - Phó Chánh VP',
+    'Đ/c Nguyễn Văn Dực - Phó Chánh VP',
+    'Đ/c Nguyễn Xuân Phương - Phó Chánh VP',
+    'Đ/c Lê Anh Tuấn - Phó Chánh VP'
   ];
 
   const taskTitles = [

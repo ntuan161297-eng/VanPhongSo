@@ -185,7 +185,7 @@ export const TaskDeepAnalysisMode: React.FC<TaskDeepAnalysisModeProps> = ({
         <Col xs={24} lg={14}>
           <div className="gov-card">
             <div className="gov-card-header">
-              <span className="gov-card-title">Thống kê theo Lãnh đạo UBND tỉnh giao việc</span>
+              <span className="gov-card-title">Thống kê theo Lãnh đạo Văn phòng UBND tỉnh giao việc</span>
               <span style={{ fontSize: 12, color: '#64748b' }}>Tiến độ các khối công tác</span>
             </div>
             <div style={{ height: 260 }}>
