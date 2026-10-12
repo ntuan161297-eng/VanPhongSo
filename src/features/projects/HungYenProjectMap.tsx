@@ -27,305 +27,8 @@ interface HungYenProjectMapProps {
 }
 
 
-// 16 key zones representing the administrative space of the new Hung Yen Province (combining Hung Yen & Thai Binh)
-interface LocalityDensityZone {
-  id: string;
-  name: string;
-  shortName: string;
-  type: 'PHUONG' | 'XA';
-  center: [number, number];
-  polygon: [number, number][];
-  densityPercent: number;
-  areaKm2: number;
-  projectCount: number;
-  delayedCount: number;
-  color: string;
-  borderColor: string;
-}
+import { COMMUNE_ZONES, UNIFIED_PROVINCE_BORDER, CommuneZone } from './communeBoundariesData';
 
-const LOCALITY_ZONES: LocalityDensityZone[] = [
-  {
-    id: 'zone-my-hao',
-    name: 'Phường Mỹ Hào',
-    shortName: 'P. Mỹ Hào',
-    type: 'PHUONG',
-    center: [20.93, 106.10],
-    polygon: [
-      [20.95, 106.06], [20.96, 106.13], [20.92, 106.16], [20.89, 106.12], [20.90, 106.07]
-    ],
-    densityPercent: 16.87,
-    areaKm2: 82.98,
-    projectCount: 14,
-    delayedCount: 3,
-    color: '#ef4444', // Red - High Density Hotspot
-    borderColor: '#b91c1c'
-  },
-  {
-    id: 'zone-pho-hien',
-    name: 'Phường Phố Hiến',
-    shortName: 'P. Phố Hiến',
-    type: 'PHUONG',
-    center: [20.655, 106.055],
-    polygon: [
-      [20.68, 106.02], [20.68, 106.09], [20.63, 106.09], [20.63, 106.02]
-    ],
-    densityPercent: 10.63,
-    areaKm2: 28.23,
-    projectCount: 4,
-    delayedCount: 0,
-    color: '#f59e0b', // Yellow/Amber - Medium-High
-    borderColor: '#d97706'
-  },
-  {
-    id: 'zone-van-giang',
-    name: 'Xã Văn Giang',
-    shortName: 'Xã Văn Giang',
-    type: 'XA',
-    center: [20.94, 105.955],
-    polygon: [
-      [20.96, 105.92], [20.97, 105.99], [20.91, 105.99], [20.91, 105.93]
-    ],
-    densityPercent: 9.35,
-    areaKm2: 32.10,
-    projectCount: 3,
-    delayedCount: 1,
-    color: '#f59e0b',
-    borderColor: '#d97706'
-  },
-  {
-    id: 'zone-thai-binh',
-    name: 'Phường Thái Bình',
-    shortName: 'P. Thái Bình',
-    type: 'PHUONG',
-    center: [20.45, 106.335],
-    polygon: [
-      [20.48, 106.30], [20.48, 106.37], [20.42, 106.37], [20.42, 106.30]
-    ],
-    densityPercent: 9.05,
-    areaKm2: 33.14,
-    projectCount: 3,
-    delayedCount: 0,
-    color: '#f59e0b',
-    borderColor: '#d97706'
-  },
-  {
-    id: 'zone-tien-hai',
-    name: 'Xã Tiền Hải',
-    shortName: 'Xã Tiền Hải',
-    type: 'XA',
-    center: [20.40, 106.52],
-    polygon: [
-      [20.44, 106.46], [20.44, 106.58], [20.35, 106.58], [20.35, 106.46]
-    ],
-    densityPercent: 8.23,
-    areaKm2: 35.47,
-    projectCount: 3,
-    delayedCount: 0,
-    color: '#f59e0b',
-    borderColor: '#d97706'
-  },
-  {
-    id: 'zone-quynh-phu',
-    name: 'Xã Quỳnh Phụ',
-    shortName: 'Xã Quỳnh Phụ',
-    type: 'XA',
-    center: [20.73, 106.35],
-    polygon: [
-      [20.76, 106.30], [20.77, 106.41], [20.69, 106.41], [20.69, 106.30]
-    ],
-    densityPercent: 7.84,
-    areaKm2: 38.27,
-    projectCount: 3,
-    delayedCount: 1,
-    color: '#f59e0b',
-    borderColor: '#d97706'
-  },
-  {
-    id: 'zone-nghia-tru',
-    name: 'Xã Nghĩa Trụ',
-    shortName: 'Xã Nghĩa Trụ',
-    type: 'XA',
-    center: [20.97, 105.96],
-    polygon: [
-      [20.99, 105.93], [20.99, 106.00], [20.95, 106.00], [20.95, 105.93]
-    ],
-    densityPercent: 6.45,
-    areaKm2: 25.10,
-    projectCount: 2,
-    delayedCount: 0,
-    color: '#10b981', // Mint Green - Moderate
-    borderColor: '#059669'
-  },
-  {
-    id: 'zone-yen-my',
-    name: 'Xã Yên Mỹ',
-    shortName: 'Xã Yên Mỹ',
-    type: 'XA',
-    center: [20.89, 106.04],
-    polygon: [
-      [20.92, 106.01], [20.92, 106.07], [20.86, 106.07], [20.86, 106.01]
-    ],
-    densityPercent: 6.10,
-    areaKm2: 30.50,
-    projectCount: 2,
-    delayedCount: 0,
-    color: '#10b981',
-    borderColor: '#059669'
-  },
-  {
-    id: 'zone-khoai-chau',
-    name: 'Xã Khoái Châu',
-    shortName: 'Xã Khoái Châu',
-    type: 'XA',
-    center: [20.82, 105.98],
-    polygon: [
-      [20.85, 105.94], [20.85, 106.02], [20.78, 106.02], [20.78, 105.94]
-    ],
-    densityPercent: 5.90,
-    areaKm2: 36.40,
-    projectCount: 2,
-    delayedCount: 0,
-    color: '#10b981',
-    borderColor: '#059669'
-  },
-  {
-    id: 'zone-kien-xuong',
-    name: 'Xã Kiến Xương',
-    shortName: 'Xã Kiến Xương',
-    type: 'XA',
-    center: [20.38, 106.36],
-    polygon: [
-      [20.42, 106.31], [20.42, 106.42], [20.32, 106.42], [20.32, 106.31]
-    ],
-    densityPercent: 5.80,
-    areaKm2: 31.40,
-    projectCount: 2,
-    delayedCount: 0,
-    color: '#10b981',
-    borderColor: '#059669'
-  },
-  {
-    id: 'zone-an-thi',
-    name: 'Xã Ân Thi',
-    shortName: 'Xã Ân Thi',
-    type: 'XA',
-    center: [20.82, 106.12],
-    polygon: [
-      [20.86, 106.08], [20.86, 106.17], [20.77, 106.17], [20.77, 106.08]
-    ],
-    densityPercent: 5.20,
-    areaKm2: 34.20,
-    projectCount: 1,
-    delayedCount: 0,
-    color: '#10b981',
-    borderColor: '#059669'
-  },
-  {
-    id: 'zone-tien-lu',
-    name: 'Xã Tiên Lữ',
-    shortName: 'Xã Tiên Lữ',
-    type: 'XA',
-    center: [20.69, 106.18],
-    polygon: [
-      [20.73, 106.13], [20.73, 106.22], [20.65, 106.22], [20.65, 106.13]
-    ],
-    densityPercent: 4.80,
-    areaKm2: 32.50,
-    projectCount: 1,
-    delayedCount: 0,
-    color: '#ffffff', // Pale White/Translucent
-    borderColor: '#94a3b8'
-  },
-  {
-    id: 'zone-hung-ha',
-    name: 'Xã Hưng Hà',
-    shortName: 'Xã Hưng Hà',
-    type: 'XA',
-    center: [20.60, 106.22],
-    polygon: [
-      [20.64, 106.17], [20.65, 106.27], [20.55, 106.27], [20.55, 106.17]
-    ],
-    densityPercent: 4.50,
-    areaKm2: 37.10,
-    projectCount: 1,
-    delayedCount: 0,
-    color: '#ffffff',
-    borderColor: '#94a3b8'
-  },
-  {
-    id: 'zone-dong-hung',
-    name: 'Xã Đông Hưng',
-    shortName: 'Xã Đông Hưng',
-    type: 'XA',
-    center: [20.55, 106.36],
-    polygon: [
-      [20.59, 106.30], [20.59, 106.42], [20.50, 106.42], [20.50, 106.30]
-    ],
-    densityPercent: 4.20,
-    areaKm2: 35.80,
-    projectCount: 1,
-    delayedCount: 0,
-    color: '#ffffff',
-    borderColor: '#94a3b8'
-  },
-  {
-    id: 'zone-thai-thuy',
-    name: 'Xã Thái Thụy',
-    shortName: 'Xã Thái Thụy',
-    type: 'XA',
-    center: [20.55, 106.52],
-    polygon: [
-      [20.60, 106.46], [20.60, 106.59], [20.48, 106.59], [20.48, 106.46]
-    ],
-    densityPercent: 4.00,
-    areaKm2: 44.50,
-    projectCount: 1,
-    delayedCount: 0,
-    color: '#ffffff',
-    borderColor: '#94a3b8'
-  },
-  {
-    id: 'zone-vu-thu',
-    name: 'Xã Vũ Thư',
-    shortName: 'Xã Vũ Thư',
-    type: 'XA',
-    center: [20.44, 106.22],
-    polygon: [
-      [20.48, 106.17], [20.49, 106.28], [20.38, 106.28], [20.38, 106.17]
-    ],
-    densityPercent: 3.80,
-    areaKm2: 36.70,
-    projectCount: 1,
-    delayedCount: 0,
-    color: '#ffffff',
-    borderColor: '#94a3b8'
-  }
-];
-
-// Outer provincial boundary of the new unified Hung Yen Province
-const PROVINCE_OUTER_BOUNDARY: [number, number][] = [
-  [20.98, 105.93],
-  [20.99, 106.05],
-  [20.98, 106.14],
-  [20.94, 106.20],
-  [20.91, 106.27],
-  [20.84, 106.33],
-  [20.76, 106.39],
-  [20.68, 106.46],
-  [20.59, 106.59],
-  [20.48, 106.63],
-  [20.36, 106.56],
-  [20.26, 106.46],
-  [20.29, 106.33],
-  [20.38, 106.22],
-  [20.46, 106.16],
-  [20.55, 106.08],
-  [20.63, 106.01],
-  [20.72, 105.95],
-  [20.82, 105.92],
-  [20.92, 105.91],
-  [20.98, 105.93]
-];
 
 export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
   projects,
@@ -368,6 +71,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
 
   // States
   const [mapType, setMapType] = useState<'SATELLITE' | 'STREET' | 'TERRAIN'>('SATELLITE');
+  const [showCommuneBoundaries, setShowCommuneBoundaries] = useState(true);
   const [densityViewMode, setDensityViewMode] = useState<'DENSITY' | 'COUNT'>('DENSITY');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeChip, setActiveChip] = useState<'ALL' | 'KEY' | 'PETITION' | 'RISK' | 'DELAYED'>('ALL');
@@ -398,7 +102,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
       attributionControl: false
     });
 
-    // Default: Google Satellite Hybrid Tile Layer (matching reference image)
+    // Default: Google Satellite Hybrid Tile Layer (vệ tinh sắc nét, có đường bộ)
     const googleHybridTile = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
       maxZoom: 20,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
@@ -451,7 +155,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
     tileLayerRef.current = newTileLayer;
   }, [mapType]);
 
-  // 3. Render Province Boundary & Locality Choropleth Polygons (Mật độ dự án)
+  // 3. Render Province Boundary & Commune Administrative Polygons (Địa giới hành chính xã/phường chuẩn ảnh 1)
   useEffect(() => {
     const map = mapInstanceRef.current;
     const group = polygonsLayerRef.current;
@@ -459,27 +163,25 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
 
     group.clearLayers();
 
-    // Red Outer Boundary of New Hung Yen Province (matching screenshot)
-    const provinceBorder = L.polygon(PROVINCE_OUTER_BOUNDARY, {
+    // Red Outer Boundary of New Hung Yen Province
+    const provinceBorder = L.polygon(UNIFIED_PROVINCE_BORDER, {
       color: '#ef4444',
-      weight: 3,
-      opacity: 0.95,
+      weight: 2.5,
+      opacity: 0.9,
       fillColor: '#ffffff',
-      fillOpacity: 0.08,
-      dashArray: undefined
+      fillOpacity: 0.05
     });
     group.addLayer(provinceBorder);
 
-    // Locality Polygons with Choropleth Density Fill
-    LOCALITY_ZONES.forEach(zone => {
-      // Determine fill opacity and color based on density mode
-      const fillOpacity = zone.color === '#ef4444' ? 0.48 : zone.color === '#f59e0b' ? 0.42 : zone.color === '#10b981' ? 0.36 : 0.22;
+    // Render Full Commune Polygons (Địa giới hành chính các xã theo Ảnh 1)
+    COMMUNE_ZONES.forEach(commune => {
+      const fillOpacity = showCommuneBoundaries ? 0.64 : 0.05;
       
-      const poly = L.polygon(zone.polygon, {
-        color: zone.borderColor,
+      const poly = L.polygon(commune.polygon, {
+        color: '#ffffff', // Crisp white administrative border
         weight: 1.5,
-        opacity: 0.85,
-        fillColor: zone.color,
+        opacity: 0.95,
+        fillColor: '#2563eb', // Royal Blue matching reference screenshot
         fillOpacity: fillOpacity
       });
 
@@ -488,67 +190,107 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
         poly.setStyle({
           weight: 2.5,
           color: '#ffffff',
-          fillOpacity: Math.min(0.7, fillOpacity + 0.2)
+          fillColor: '#3b82f6',
+          fillOpacity: Math.min(0.85, fillOpacity + 0.18)
         });
       });
 
       poly.on('mouseout', () => {
         poly.setStyle({
           weight: 1.5,
-          color: zone.borderColor,
+          color: '#ffffff',
+          fillColor: '#2563eb',
           fillOpacity: fillOpacity
         });
       });
 
       poly.on('click', () => {
-        map.flyTo(zone.center, 12, { duration: 1 });
+        map.flyTo(commune.center, 12.5, { duration: 1 });
       });
 
-      group.addLayer(poly);
-
-      // Label Marker for Locality Name on map
-      const labelHtml = `
-        <div style="
-          text-align: center;
-          font-family: system-ui, sans-serif;
-          pointer-events: none;
-          transform: translate(-50%, -50%);
-        ">
-          <div style="
-            font-size: 11px;
-            font-weight: 800;
-            color: #0f172a;
-            text-shadow: 0 1px 3px rgba(255,255,255,0.9), 0 0 5px #ffffff;
-            white-space: nowrap;
-          ">
-            ${zone.shortName}
+      const popupContent = `
+        <div style="font-family: system-ui, sans-serif; padding: 4px; min-width: 180px;">
+          <div style="font-size: 13.5px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">
+            ${commune.name}
           </div>
-          <div style="
-            font-size: 9.5px;
-            font-weight: 700;
-            color: #1e40af;
-            text-shadow: 0 1px 2px rgba(255,255,255,0.9);
-          ">
-            (${zone.projectCount} DA)
+          <div style="font-size: 11.5px; color: #64748b; margin-bottom: 2px;">
+            📍 Địa giới hành chính cấp xã
+          </div>
+          <div style="font-size: 11.5px; color: #334155; margin-bottom: 2px;">
+            📐 Diện tích: <strong>${commune.areaKm2} km²</strong>
+          </div>
+          <div style="font-size: 11.5px; color: #2563eb; margin-top: 4px;">
+            🏗️ Dự án theo dõi: <strong>${commune.projectCount} dự án</strong>
           </div>
         </div>
       `;
+      poly.bindPopup(popupContent);
 
-      const labelIcon = L.divIcon({
-        html: labelHtml,
-        className: 'locality-label-icon',
-        iconSize: [80, 30],
-        iconAnchor: [40, 15]
-      });
+      group.addLayer(poly);
 
-      const labelMarker = L.marker(zone.center, {
-        icon: labelIcon,
-        interactive: false
-      });
+      if (showCommuneBoundaries) {
+        // Red Pin Icon with '+' cross matching reference screenshot (Ảnh 1)
+        const redPinHtml = commune.hasRedPin ? `
+          <div style="
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ef4444;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 2px;
+            pointer-events: auto;
+            cursor: pointer;
+          ">+</div>
+        ` : '';
 
-      group.addLayer(labelMarker);
+        // Label Marker for Commune Name on map
+        const labelHtml = `
+          <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            font-family: system-ui, sans-serif;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+          ">
+            ${redPinHtml}
+            <div style="
+              font-size: 9.5px;
+              font-weight: 700;
+              color: #ffffff;
+              text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 3px #000000;
+              white-space: nowrap;
+            ">
+              ${commune.name}
+            </div>
+          </div>
+        `;
+
+        const labelIcon = L.divIcon({
+          html: labelHtml,
+          className: 'commune-label-icon',
+          iconSize: [90, 36],
+          iconAnchor: [45, 18]
+        });
+
+        const labelMarker = L.marker(commune.center, {
+          icon: labelIcon,
+          interactive: false
+        });
+
+        group.addLayer(labelMarker);
+      }
     });
-  }, [densityViewMode]);
+  }, [showCommuneBoundaries, densityViewMode]);
 
   // 4. Render Project Pins & Markers (Filtering by Status & Search)
   const filteredProjects = useMemo(() => {
@@ -797,6 +539,32 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
             />
           </div>
         </Tooltip>
+
+        {/* Toggle Phân chia địa giới hành chính các xã (Chuẩn ảnh 1) */}
+        <Tooltip title="Bật/tắt lớp phân giới hành chính các xã trên địa bàn tỉnh">
+          <button
+            onClick={() => setShowCommuneBoundaries(!showCommuneBoundaries)}
+            style={{
+              height: 38,
+              padding: '0 12px',
+              borderRadius: 8,
+              background: showCommuneBoundaries ? '#2563eb' : '#ffffff',
+              color: showCommuneBoundaries ? '#ffffff' : '#334155',
+              border: '1px solid',
+              borderColor: showCommuneBoundaries ? '#1d4ed8' : '#cbd5e1',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              cursor: 'pointer',
+              fontSize: 12,
+              fontWeight: 700
+            }}
+          >
+            <Layers size={15} />
+            <span>Địa giới xã</span>
+          </button>
+        </Tooltip>
       </div>
 
       {/* 3. Top-Right Floating Controls: Compass & Compass Heading */}
@@ -991,67 +759,73 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
               />
             </div>
 
-            {/* Ranked List of Localities by Density / Count */}
+            {/* Ranked List of Communes by Project Count / Density */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              {LOCALITY_ZONES.slice(0, 7).map((item, idx) => {
-                let barColor = '#f59e0b';
-                if (idx === 0) barColor = '#ef4444'; // Red bar for top density locality (P. Mỹ Hào)
-                if (idx > 4) barColor = '#10b981';
+              {COMMUNE_ZONES
+                .slice()
+                .sort((a, b) => b.projectCount - a.projectCount)
+                .slice(0, 8)
+                .map((item, idx) => {
+                  let barColor = '#f59e0b';
+                  if (idx === 0) barColor = '#ef4444'; // Red badge for top locality
+                  if (idx > 4) barColor = '#10b981';
 
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => handleFlyToLocality(item.center)}
-                    style={{
-                      padding: '6px 8px',
-                      borderRadius: 6,
-                      background: '#ffffff',
-                      border: '1px solid #f1f5f9',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#93c5fd')}
-                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#f1f5f9')}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ 
-                          width: 17, 
-                          height: 17, 
-                          borderRadius: '50%', 
-                          background: idx === 0 ? '#ef4444' : idx < 3 ? '#f59e0b' : '#64748b',
-                          color: '#ffffff',
-                          fontSize: 10,
-                          fontWeight: 700,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}>
-                          {idx + 1}
-                        </span>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: '#1e293b' }}>
-                          {item.name}
+                  const densityPercent = ((item.projectCount / 34) * 100).toFixed(1);
+
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => handleFlyToLocality(item.center)}
+                      style={{
+                        padding: '6px 8px',
+                        borderRadius: 6,
+                        background: '#ffffff',
+                        border: '1px solid #f1f5f9',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#93c5fd')}
+                      onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#f1f5f9')}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ 
+                            width: 17, 
+                            height: 17, 
+                            borderRadius: '50%', 
+                            background: idx === 0 ? '#ef4444' : idx < 3 ? '#f59e0b' : '#64748b',
+                            color: '#ffffff',
+                            fontSize: 10,
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}>
+                            {idx + 1}
+                          </span>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: '#1e293b' }}>
+                            {item.name}
+                          </span>
+                        </div>
+                        <span style={{ fontSize: 11.5, fontWeight: 700, color: '#0f172a' }}>
+                          {item.projectCount} dự án
                         </span>
                       </div>
-                      <span style={{ fontSize: 11.5, fontWeight: 700, color: '#0f172a' }}>
-                        {item.projectCount} dự án
-                      </span>
-                    </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 10.5, color: '#64748b' }}>
-                      <span>Mật độ: <strong style={{ color: barColor }}>{item.densityPercent}%</strong> ({item.areaKm2} km²)</span>
-                      {item.delayedCount > 0 && (
-                        <span style={{ color: '#ef4444', fontWeight: 600 }}>{item.delayedCount} chậm</span>
-                      )}
-                    </div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 10.5, color: '#64748b' }}>
+                        <span>Tỷ trọng: <strong style={{ color: barColor }}>{densityPercent}%</strong> ({item.areaKm2} km²)</span>
+                        {item.hasRedPin && (
+                          <span style={{ color: '#ef4444', fontWeight: 600 }}>Điểm nóng trọng điểm</span>
+                        )}
+                      </div>
 
-                    {/* Progress density bar matching screenshot */}
-                    <div style={{ height: 3, width: '100%', background: '#f1f5f9', borderRadius: 2, marginTop: 4, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${Math.min(100, item.densityPercent * 5)}%`, background: barColor }} />
+                      {/* Progress bar */}
+                      <div style={{ height: 3, width: '100%', background: '#f1f5f9', borderRadius: 2, marginTop: 4, overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${Math.min(100, item.projectCount * 12)}%`, background: barColor }} />
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         )}
