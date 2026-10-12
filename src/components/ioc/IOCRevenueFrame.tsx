@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Tag, Tooltip, Input, Select, Modal, Segmented } from 'antd';
+import { Tag, Tooltip, Input, Select, Modal, Segmented, Button, Space, message } from 'antd';
 import { 
   FullscreenOutlined, 
   FullscreenExitOutlined, 
@@ -8,8 +8,13 @@ import {
   SettingOutlined, 
   GlobalOutlined,
   AppstoreOutlined,
-  SearchOutlined
+  SearchOutlined,
+  CloseCircleOutlined,
+  DownloadOutlined,
+  PrinterOutlined
 } from '@ant-design/icons';
+import { OrganizationService } from '../../services/organizationService';
+import { AdministrativeUnitService } from '../../services/administrativeUnitService';
 import { 
   ResponsiveContainer, 
   BarChart, 
@@ -104,8 +109,109 @@ export const IOCRevenueFrame: React.FC<IOCRevenueFrameProps> = ({
   const [tempUrl, setTempUrl] = useState(initialIframeUrl);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState('2026');
-  const [selectedMonth, setSelectedMonth] = useState('10');
-  const [selectedScope, setSelectedScope] = useState('ALL');
+  const [selectedPeriod, setSelectedPeriod] = useState('M10');
+  const [selectedScope, setSelectedScope] = useState<'ALL' | 'PROVINCIAL_DEPT' | 'COMMUNE' | 'OTHER'>('ALL');
+  const [selectedDepartment, setSelectedDepartment] = useState('ALL');
+  const [selectedDistrict, setSelectedDistrict] = useState('ALL');
+
+  const provincialDepts = OrganizationService.getProvincialDepartments();
+  const provincialAgencies = OrganizationService.getProvincialAgencies();
+  const communeGovernments = OrganizationService.getCommuneGovernments();
+  const wards = AdministrativeUnitService.getWards();
+  const communes = AdministrativeUnitService.getCommunes();
+
+  const resetFilters = () => {
+    setSelectedYear('2026');
+    setSelectedPeriod('M10');
+    setSelectedScope('ALL');
+    setSelectedDepartment('ALL');
+    setSelectedDistrict('ALL');
+    setSearchTerm('');
+    message.info('Đã xóa bộ lọc về mặc định');
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleExportCSV = () => {
+    let csv = "data:text/csv;charset=utf-8,\uFEFF";
+    csv += "STT,TÊN CHỈ TIÊU,NSNN KỲ (TRIỆU ĐỒNG),NS TRUNG ƯƠNG,NS ĐỊA PHƯƠNG,NS TỈNH,NS XÃ,LŨY KẾ NSNN\n";
+    filteredTableData.forEach((item, index) => {
+      const ten = `"${item.tenChiTieu.replace(/"/g, '""')}"`;
+      csv += `${index + 1},${ten},${item.nsnnKy},${item.nsTrungUong},${item.nsDiaPhuong},${item.nsTinh},${item.nsXa},${item.luyKeNsnn}\n`;
+    });
+    const encoded = encodeURI(csv);
+    const link = document.createElement("a");
+    link.setAttribute("href", encoded);
+    link.setAttribute("download", `Hung_Yen_Thu_Ngan_Sach_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    message.success(`Đã xuất ${filteredTableData.length} chỉ tiêu thu ngân sách ra file CSV!`);
+  };
+
+  const getOrganizationOptions = () => {
+    if (selectedScope === 'PROVINCIAL_DEPT') {
+      return [
+        { value: 'ALL', label: 'Tất cả Sở / Ban / Ngành' },
+        {
+          label: '10 SỞ CHUYÊN MÔN CỦA TỈNH',
+          options: provincialDepts.map(d => ({ value: d.shortName, label: d.name }))
+        },
+        {
+          label: 'CƠ QUAN TÀI CHÍNH - THUẾ - KHO BẠC & BAN THUỘC TỈNH',
+          options: provincialAgencies.map(a => ({ value: a.shortName, label: a.name }))
+        }
+      ];
+    }
+    if (selectedScope === 'COMMUNE') {
+      return [
+        { value: 'ALL', label: 'Tất cả 104 Xã, Phường' },
+        {
+          label: '11 PHƯỜNG ĐÔ THỊ',
+          options: communeGovernments.filter(c => c.name.includes('Phường')).map(c => ({ value: c.shortName, label: c.name }))
+        },
+        {
+          label: '93 XÃ NÔNG THÔN MỚI & CÔNG NGHIỆP',
+          options: communeGovernments.filter(c => c.name.includes('Xã')).map(c => ({ value: c.shortName, label: c.name }))
+        }
+      ];
+    }
+    if (selectedScope === 'OTHER') {
+      return [
+        { value: 'ALL', label: 'Tất cả cơ quan phối hợp' },
+        ...provincialAgencies.filter(a => a.type === 'OTHER_RELATED_AGENCY').map(a => ({ value: a.shortName, label: a.name }))
+      ];
+    }
+    return [
+      { value: 'ALL', label: 'Toàn tỉnh (tất cả cơ quan, đơn vị)' },
+      {
+        label: '10 SỞ CHUYÊN MÔN CỦA TỈNH',
+        options: provincialDepts.map(d => ({ value: d.shortName, label: d.name }))
+      },
+      {
+        label: 'CƠ QUAN TÀI CHÍNH - THUẾ - KHO BẠC & BAN THUỘC TỈNH',
+        options: provincialAgencies.map(a => ({ value: a.shortName, label: a.name }))
+      },
+      {
+        label: 'CHÍNH QUYỀN CẤP CƠ SỞ (104 XÃ/PHƯỜNG)',
+        options: communeGovernments.map(c => ({ value: c.shortName, label: c.name }))
+      }
+    ];
+  };
+
+  const districtOptions = [
+    { value: 'ALL', label: 'Toàn tỉnh Hưng Yên' },
+    {
+      label: '11 PHƯỜNG ĐÔ THỊ',
+      options: wards.map(w => ({ value: w.name, label: w.name }))
+    },
+    {
+      label: '93 XÃ NÔNG THÔN MỚI & CÔNG NGHIỆP',
+      options: communes.map(c => ({ value: c.name, label: c.name }))
+    }
+  ];
 
   // Dữ liệu biểu đồ cơ cấu theo cấp ngân sách (Donut)
   const donutData = [
@@ -260,61 +366,172 @@ export const IOCRevenueFrame: React.FC<IOCRevenueFrameProps> = ({
         /* NATIVE VIEW - TÁI LẬP 100% GIAO DIỆN CHUẨN HTML & ẢNH 4 */
         <div className="thu-chi-ngan-sach-dashboard" style={{ padding: '16px 20px', background: '#f8fafc', minHeight: 700 }}>
           
-          {/* TOOLBAR: Số liệu chốt & Bộ lọc Năm / Tháng / Đơn vị */}
+          {/* Meta line */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
-            gap: 12,
-            marginBottom: 16
+            gap: 10,
+            marginBottom: 12
           }}>
             <p style={{ margin: 0, fontSize: 13.5, color: '#334155' }}>
-              Số liệu chốt ngày <strong style={{ color: '#0f172a' }}>12/10/2026</strong>, kỳ báo cáo <strong>Tháng 10/2026</strong>
+              Số liệu chốt ngày <strong style={{ color: '#0f172a' }}>12/10/2026</strong>, kỳ báo cáo <strong>Tháng 10/2026</strong> • Nguồn: <strong style={{ color: '#059669' }}>Hệ thống Tabmis & Sở Tài chính</strong>
             </p>
+          </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <Select
-                value={selectedYear}
-                onChange={setSelectedYear}
-                style={{ width: 115 }}
-                size="middle"
-                options={[
-                  { value: '2026', label: 'Năm 2026' },
-                  { value: '2025', label: 'Năm 2025' },
-                  { value: '2024', label: 'Năm 2024' }
-                ]}
-              />
+          {/* CHUẨN FILTER BAR LAYOUT CỦA PHẦN MỀM */}
+          <div 
+            className="filter-bar"
+            style={{
+              background: '#ffffff',
+              border: '1px solid #DCE5EF',
+              borderRadius: 8,
+              padding: '10px 14px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 10,
+              marginBottom: 16
+            }}
+          >
+            {/* Left Filter Controls */}
+            <div className="filter-bar-left" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+              {/* Năm */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ fontSize: 12.5, color: '#64748B' }}>Năm:</span>
+                <Select
+                  value={selectedYear}
+                  onChange={setSelectedYear}
+                  style={{ width: 92 }}
+                  size="middle"
+                  options={[
+                    { value: '2026', label: '2026' },
+                    { value: '2025', label: '2025' },
+                    { value: '2024', label: '2024' }
+                  ]}
+                />
+              </div>
 
-              <Select
-                value={selectedMonth}
-                onChange={setSelectedMonth}
-                style={{ width: 125 }}
-                size="middle"
-                options={[
-                  { value: '10', label: 'Tháng 10' },
-                  { value: '09', label: 'Tháng 9' },
-                  { value: '08', label: 'Tháng 8' },
-                  { value: '07', label: 'Tháng 7' },
-                  { value: '06', label: 'Tháng 6' }
-                ]}
-              />
+              {/* Kỳ */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ fontSize: 12.5, color: '#64748B' }}>Kỳ:</span>
+                <Select
+                  value={selectedPeriod}
+                  onChange={setSelectedPeriod}
+                  style={{ width: 110 }}
+                  size="middle"
+                  options={[
+                    { value: 'M10', label: 'Tháng 10' },
+                    { value: 'M09', label: 'Tháng 9' },
+                    { value: 'M08', label: 'Tháng 8' },
+                    { value: 'Q3', label: 'Quý III' },
+                    { value: 'Q2', label: 'Quý II' },
+                    { value: 'Q1', label: 'Quý I' },
+                    { value: 'ALL', label: 'Cả năm' }
+                  ]}
+                />
+              </div>
 
-              <Select
-                value={selectedScope}
-                onChange={setSelectedScope}
-                style={{ width: 220 }}
+              {/* Phạm vi */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ fontSize: 12.5, color: '#64748B' }}>Phạm vi:</span>
+                <Select
+                  value={selectedScope}
+                  onChange={(val) => {
+                    setSelectedScope(val);
+                    setSelectedDepartment('ALL');
+                  }}
+                  style={{ width: 135 }}
+                  size="middle"
+                  options={[
+                    { value: 'ALL', label: 'Toàn tỉnh' },
+                    { value: 'PROVINCIAL_DEPT', label: 'Sở/Ban/Ngành' },
+                    { value: 'COMMUNE', label: 'Xã/Phường' },
+                    { value: 'OTHER', label: 'Cơ quan khác' }
+                  ]}
+                />
+              </div>
+
+              {/* Đơn vị */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ fontSize: 12.5, color: '#64748B' }}>Đơn vị:</span>
+                <Select
+                  value={selectedDepartment}
+                  onChange={setSelectedDepartment}
+                  style={{ width: 220 }}
+                  showSearch
+                  optionFilterProp="label"
+                  size="middle"
+                  options={getOrganizationOptions()}
+                />
+              </div>
+
+              {/* Địa bàn (104 Xã/Phường) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ fontSize: 12.5, color: '#64748B' }}>Địa bàn:</span>
+                <Select
+                  value={selectedDistrict}
+                  onChange={setSelectedDistrict}
+                  style={{ width: 195 }}
+                  size="middle"
+                  showSearch
+                  optionFilterProp="label"
+                  options={districtOptions}
+                />
+              </div>
+
+              {/* Search input */}
+              <Input
+                placeholder="Tìm từ khóa / chỉ tiêu..."
+                prefix={<SearchOutlined style={{ color: '#94a3b8' }} />}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ width: 175 }}
+                allowClear
                 size="middle"
-                options={[
-                  { value: 'ALL', label: 'Toàn tỉnh (tất cả đơn vị)' },
-                  { value: 'TP_HY', label: 'TP Hưng Yên' },
-                  { value: 'TX_MY_HAO', label: 'Thị xã Mỹ Hào' },
-                  { value: 'VAN_GIANG', label: 'Huyện Văn Giang' },
-                  { value: 'YEN_MY', label: 'Huyện Yên Mỹ' },
-                  { value: 'KHOAI_CHAU', label: 'Huyện Khoái Châu' }
-                ]}
               />
             </div>
+
+            {/* Right Action Buttons */}
+            <Space size={6} className="filter-bar-right">
+              <Button 
+                icon={<CloseCircleOutlined />} 
+                onClick={resetFilters}
+                size="middle"
+              >
+                Xóa lọc
+              </Button>
+
+              <Button 
+                icon={<ReloadOutlined />} 
+                onClick={() => {
+                  message.success('Đã làm mới dữ liệu thu ngân sách từ IOC!');
+                }}
+                size="middle"
+              >
+                Làm mới
+              </Button>
+
+              <Button 
+                type="primary"
+                icon={<DownloadOutlined />}
+                onClick={handleExportCSV}
+                size="middle"
+                style={{ background: '#1769AA', borderColor: '#1769AA', fontWeight: 600 }}
+              >
+                Xuất CSV
+              </Button>
+
+              <Button 
+                icon={<PrinterOutlined />} 
+                onClick={handlePrint}
+                size="middle"
+              >
+                In
+              </Button>
+            </Space>
           </div>
 
           {/* HÀNG 1: 2 THẺ KPI CHÍNH (THU NGÂN SÁCH KỲ & LŨY KẾ) */}
