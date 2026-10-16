@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { 
   Row, 
@@ -78,11 +78,11 @@ export const ProjectDashboard: React.FC = () => {
 
   // Tab lọc giai đoạn trong bảng: ALL | THU_TUC_DAU_TU | GIAI_PHONG_MAT_BANG | THI_CONG_XAY_DUNG | EXPEDITE
   const [stageTabFilter, setStageTabFilter] = useState<string>('ALL');
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Expedite modal state
   const [expediteModalOpen, setExpediteModalOpen] = useState(false);
   const [projectToExpedite, setProjectToExpedite] = useState<ProjectItem | null>(null);
-  const [expediteForm] = Form.useForm();
 
   useEffect(() => {
     if (viewQuery === 'map') {
@@ -104,12 +104,16 @@ export const ProjectDashboard: React.FC = () => {
   };
 
   // Base list filtered by global filter and capital source
-  const allProjects = ProjectService.getAll({
-    ...filters,
-    capitalSource: capitalSourceFilter
-  });
+  const allProjects = useMemo(() => {
+    return ProjectService.getAll({
+      ...filters,
+      capitalSource: capitalSourceFilter
+    });
+  }, [filters, capitalSourceFilter, refreshKey]);
 
-  const stats = ProjectService.getStats(allProjects);
+  const stats = useMemo(() => {
+    return ProjectService.getStats(allProjects);
+  }, [allProjects]);
 
   // List filtered for table according to stageTabFilter
   let displayProjects = [...allProjects];
@@ -135,33 +139,7 @@ export const ProjectDashboard: React.FC = () => {
 
   const handleOpenExpedite = (project: ProjectItem) => {
     setProjectToExpedite(project);
-    expediteForm.resetFields();
-    expediteForm.setFieldsValue({
-      signer: 'Chủ tịch UBND tỉnh',
-      deadline: dayjs().add(15, 'day'),
-      content: `Yêu cầu ${project.expediteInfo?.leadDepartment || project.investor} khẩn trương chủ trì phối hợp với ${project.expediteInfo?.cooperatingDepartments?.join(', ') || 'các cơ quan liên quan'} tháo gỡ điểm nghẽn tại ${project.expediteInfo?.bottleneckLocation || project.district}; báo cáo tiến độ về UBND tỉnh trước thời hạn quy định.`
-    });
     setExpediteModalOpen(true);
-  };
-
-  const handleSendExpedite = (values: any) => {
-    if (!projectToExpedite) return;
-    try {
-      const deadlineStr = values.deadline ? values.deadline.format('YYYY-MM-DD') : undefined;
-      ProjectService.expediteProject(
-        projectToExpedite.id,
-        values.content,
-        values.signer,
-        deadlineStr
-      );
-      message.success(`Đã ban hành văn bản đôn đốc chỉ đạo cho dự án: ${projectToExpedite.name}`);
-      setExpediteModalOpen(false);
-      if (selectedProject?.id === projectToExpedite.id) {
-        setSelectedProject({ ...projectToExpedite });
-      }
-    } catch (e) {
-      message.error('Lỗi khi gửi văn bản đôn đốc');
-    }
   };
 
   // Capital source donut data
@@ -805,12 +783,13 @@ export const ProjectDashboard: React.FC = () => {
         </>
       )}
 
-      {/* Expedite Modal (Chuẩn giao diện Ảnh 3) */}
+      {/* Expedite Modal (Chuẩn giao diện Ảnh 3 đồng nhất với Bản đồ) */}
       <ExpediteModal
         open={expediteModalOpen}
         project={projectToExpedite}
         onClose={() => setExpediteModalOpen(false)}
         onSuccess={() => {
+          setRefreshKey(k => k + 1);
           if (selectedProject?.id === projectToExpedite?.id) {
             setSelectedProject({ ...projectToExpedite! });
           }

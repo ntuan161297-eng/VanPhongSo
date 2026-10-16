@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Row, 
   Col, 
@@ -71,12 +71,17 @@ export const ProjectCapitalSourcePage: React.FC<ProjectCapitalSourcePageProps> =
   // Expedite modal state
   const [expediteModalOpen, setExpediteModalOpen] = useState(false);
   const [projectToExpedite, setProjectToExpedite] = useState<ProjectItem | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Fetch projects
-  let projectList = ProjectService.getAll({
-    ...filters,
-    capitalSource: capitalSource
-  });
+  const rawProjectList = useMemo(() => {
+    return ProjectService.getAll({
+      ...filters,
+      capitalSource: capitalSource
+    });
+  }, [filters, capitalSource, refreshKey]);
+
+  let projectList = [...rawProjectList];
 
   if (activeStageTab === 'THU_TUC_DAU_TU') {
     projectList = projectList.filter(p => p.currentStage === 'THU_TUC_DAU_TU');
@@ -93,8 +98,13 @@ export const ProjectCapitalSourcePage: React.FC<ProjectCapitalSourcePageProps> =
   }
 
   // Toàn bộ dự án thuộc nguồn vốn này để tính KPI chuẩn
-  const allCapitalProjects = ProjectService.getAll({ capitalSource });
-  const stats = ProjectService.getStats(allCapitalProjects);
+  const allCapitalProjects = useMemo(() => {
+    return ProjectService.getAll({ capitalSource });
+  }, [capitalSource, refreshKey]);
+
+  const stats = useMemo(() => {
+    return ProjectService.getStats(allCapitalProjects);
+  }, [allCapitalProjects]);
 
   const handleOpenDetail = (project: ProjectItem) => {
     setSelectedProject(project);
@@ -708,6 +718,7 @@ export const ProjectCapitalSourcePage: React.FC<ProjectCapitalSourcePageProps> =
         open={expediteModalOpen}
         onClose={() => setExpediteModalOpen(false)}
         onSuccess={() => {
+          setRefreshKey(k => k + 1);
           if (selectedProject?.id === projectToExpedite?.id) {
             setSelectedProject({ ...projectToExpedite! });
           }

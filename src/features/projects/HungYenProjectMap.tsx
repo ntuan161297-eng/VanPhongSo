@@ -1308,7 +1308,7 @@ export const HungYenProjectMap: React.FC<HungYenProjectMapProps> = ({
                 </div>
                 <div style={{ fontSize: 12, marginBottom: 12, background: '#f0f9ff', padding: 8, borderRadius: 4 }}>
                   <strong style={{ color: '#0369a1' }}>Kiến nghị giải quyết:</strong>
-                  <div style={{ color: '#1e3a8a', marginTop: 2 }}>{activeMapProject.expediteInfo?.proposalsAndRecommendations || 'Đề nghị UBND cấp huyện phối hợp đẩy nhanh kiểm đếm'}</div>
+                  <div style={{ color: '#1e3a8a', marginTop: 2 }}>{activeMapProject.expediteInfo?.proposalsAndRecommendations || 'Đề nghị UBND cấp xã/phường và các cơ quan phối hợp đẩy nhanh xử lý'}</div>
                 </div>
                 <Button
                   block

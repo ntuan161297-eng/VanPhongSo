@@ -24,32 +24,40 @@ export const ExpediteModal: React.FC<ExpediteModalProps> = ({
 
   useEffect(() => {
     if (project && open) {
-      // Chuẩn bị danh sách đơn vị nhận đôn đốc từ cơ quan chủ trì + phối hợp + nhà đầu tư
-      const targetDepts: string[] = [];
-      if (project.expediteInfo?.leadDepartment) targetDepts.push(project.expediteInfo.leadDepartment);
-      if (project.investor && !targetDepts.includes(project.investor)) targetDepts.push(project.investor);
-      if (project.expediteInfo?.cooperatingDepartments) {
-        project.expediteInfo.cooperatingDepartments.forEach(d => {
-          if (!targetDepts.includes(d)) targetDepts.push(d);
-        });
-      }
-      if (targetDepts.length === 0) {
-        targetDepts.push('Sở Xây dựng', 'Sở Tài chính', 'Sở Nông nghiệp và Môi trường', project.investor);
-      }
+      form.resetFields();
 
-      const defaultProcedure = project.expediteInfo?.delayedStageLabel?.includes('GPMB')
-        ? 'Đất đai, GPMB, mặt bằng'
-        : project.currentStage === 'THU_TUC_DAU_TU'
-        ? 'Các thủ tục về đầu tư, doanh nghiệp, góp vốn'
-        : 'Thi công xây dựng, hạ tầng kỹ thuật';
+      // Chuẩn bị danh sách đơn vị nhận đôn đốc từ cơ quan chủ trì + phối hợp + nhà đầu tư (loại trừ trùng lặp)
+      const rawDepts: string[] = [];
+      if (project.expediteInfo?.leadDepartment) rawDepts.push(project.expediteInfo.leadDepartment);
+      if (project.investor) rawDepts.push(project.investor);
+      if (project.expediteInfo?.cooperatingDepartments) {
+        project.expediteInfo.cooperatingDepartments.forEach(d => rawDepts.push(d));
+      }
+      if (rawDepts.length === 0) {
+        rawDepts.push('Sở Xây dựng', 'Sở Tài chính', 'Sở Nông nghiệp và Môi trường', project.investor);
+      }
+      const targetDepts = Array.from(new Set(rawDepts.filter(Boolean)));
+
+      let defaultProcedure = 'Các thủ tục về đầu tư, doanh nghiệp, góp vốn';
+      if (project.expediteInfo?.delayedStage === 'GIAI_PHONG_MAT_BANG' || project.currentStage === 'GIAI_PHONG_MAT_BANG') {
+        defaultProcedure = 'Đất đai, GPMB, mặt bằng';
+      } else if (project.expediteInfo?.delayedStage === 'THI_CONG_XAY_DUNG' || project.currentStage === 'THI_CONG_XAY_DUNG') {
+        defaultProcedure = 'Thi công xây dựng, hạ tầng kỹ thuật';
+      } else if (project.currentStage === 'HOAN_THANH') {
+        defaultProcedure = 'Thiết kế, xây dựng, PCCC, đấu nối';
+      }
 
       const defaultTask = project.expediteInfo?.bottleneckLocation
         ? `Tập trung giải quyết dứt điểm điểm nghẽn tại ${project.expediteInfo.bottleneckLocation}`
-        : 'Hoàn thành hồ sơ, thủ tục thu hồi đất, bồi thường, hỗ trợ, tái định cư/GPMB (nếu Nhà nước thu hồi đất)';
+        : 'Hoàn thành hồ sơ, thủ tục bồi thường, hỗ trợ, tái định cư/GPMB và tháo gỡ vướng mắc phát sinh';
+
+      // Số văn bản gợi ý từ lịch sử đôn đốc hoặc sinh số chuẩn tỉnh
+      const existingDoc = project.expediteInfo?.expediteHistory?.[0]?.docNumber;
+      const docNumber = existingDoc || `${Math.floor(Math.random() * 800 + 100)}/UBND-KT`;
 
       form.setFieldsValue({
         targetDepts,
-        docNumber: `${Math.floor(Math.random() * 800 + 100)}/UBND-KT`,
+        docNumber,
         issueDate: dayjs(),
         summary: `V/v đôn đốc đẩy nhanh tiến độ thực hiện dự án: ${project.name}`,
         signer: 'Lãnh đạo UBND tỉnh',
@@ -105,6 +113,28 @@ export const ExpediteModal: React.FC<ExpediteModalProps> = ({
     }
   };
 
+  // Danh sách các cơ quan chính quyền 2 cấp và các Sở ban ngành để người dùng chọn nhanh
+  const allDepartmentOptions = Array.from(new Set([
+    ...(project.expediteInfo?.leadDepartment ? [project.expediteInfo.leadDepartment] : []),
+    ...(project.investor ? [project.investor] : []),
+    ...(project.expediteInfo?.cooperatingDepartments || []),
+    'Sở Xây dựng',
+    'Sở Tài chính',
+    'Sở Nông nghiệp và Môi trường',
+    'Sở Công Thương',
+    'Sở Nội vụ',
+    'Sở Tư pháp',
+    'Sở Khoa học và Công nghệ',
+    'Sở Giáo dục và Đào tạo',
+    'Sở Y tế',
+    'Sở Văn hóa, Thể thao và Du lịch',
+    'Ban Quản lý các KCN tỉnh Hưng Yên',
+    'Ban Quản lý dự án ĐTXD các công trình giao thông tỉnh',
+    'Ban Quản lý dự án ĐTXD các công trình dân dụng và công nghiệp tỉnh',
+    'Công an tỉnh (Phòng Cảnh sát PCCC)',
+    'Văn phòng UBND tỉnh'
+  ])).map(name => ({ label: name, value: name }));
+
   return (
     <Modal
       title={
@@ -127,6 +157,7 @@ export const ExpediteModal: React.FC<ExpediteModalProps> = ({
       onCancel={onClose}
       footer={null}
       width={780}
+      destroyOnClose
       styles={{ body: { padding: '0 4px 10px 4px' } }}
     >
       {/* Khung tóm tắt trạng thái (Ảnh 3) */}
@@ -146,7 +177,7 @@ export const ExpediteModal: React.FC<ExpediteModalProps> = ({
         {/* Đơn vị nhận đôn đốc */}
         <Form.Item 
           name="targetDepts" 
-          label={<span style={{ fontWeight: 600 }}>* Đơn vị/Doanh nghiệp nhận đôn đốc</span>} 
+          label={<span style={{ fontWeight: 600 }}>Đơn vị/Doanh nghiệp nhận đôn đốc</span>} 
           rules={[{ required: true, message: 'Vui lòng chọn ít nhất một đơn vị nhận đôn đốc' }]}
           extra={<span style={{ fontSize: 11.5, color: '#64748b' }}>Danh sách được lấy sẵn từ Đơn vị phối hợp trong thông tin dự án; có thể thêm hoặc bỏ đơn vị trước khi gửi.</span>}
         >
@@ -155,6 +186,7 @@ export const ExpediteModal: React.FC<ExpediteModalProps> = ({
             style={{ width: '100%' }}
             placeholder="Thêm cơ quan, đơn vị nhận đôn đốc..."
             tokenSeparators={[',']}
+            options={allDepartmentOptions}
           />
         </Form.Item>
 
@@ -217,7 +249,7 @@ export const ExpediteModal: React.FC<ExpediteModalProps> = ({
         {/* Nội dung đôn đốc */}
         <Form.Item 
           name="content" 
-          label={<span style={{ fontWeight: 600 }}>* Nội dung đôn đốc</span>} 
+          label={<span style={{ fontWeight: 600 }}>Nội dung đôn đốc</span>} 
           rules={[{ required: true, message: 'Vui lòng nhập nội dung chỉ đạo đôn đốc' }]}
         >
           <TextArea rows={4} placeholder="Nhập chi tiết nội dung chỉ đạo tháo gỡ khó khăn, yêu cầu các đơn vị chủ trì, phối hợp thực hiện..." />
