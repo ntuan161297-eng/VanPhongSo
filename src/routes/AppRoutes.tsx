@@ -8,7 +8,7 @@ import { LoginPage } from '../features/auth/LoginPage';
 import { TaskDashboard } from '../features/tasks/TaskDashboard';
 import { TaskListPage } from '../features/tasks/TaskListPage';
 import { ProjectDashboard } from '../features/projects/ProjectDashboard';
-import { ProjectSectorPage } from '../features/projects/ProjectSectorPage';
+import { ProjectCapitalSourcePage } from '../features/projects/ProjectCapitalSourcePage';
 import { DisbursementDashboard } from '../features/disbursement/DisbursementDashboard';
 import { DisbursementCapitalPage } from '../features/disbursement/DisbursementCapitalPage';
 import { BudgetDashboard } from '../features/budget/BudgetDashboard';
@@ -92,35 +92,29 @@ export const AppRoutes: React.FC = () => {
         <Route path="du-an" element={<Navigate to="/du-an/dashboard" replace />} />
         <Route path="du-an/dashboard" element={<ProjectDashboard />} />
         <Route 
-          path="du-an/giao-thong" 
+          path="du-an/su-dung-nsnn" 
           element={
-            <ProjectSectorPage 
-              sector="GIAO_THONG" 
-              title="DỰ ÁN TRỌNG ĐIỂM LĨNH VỰC GIAO THÔNG" 
-              subtitle="Các tuyến cao tốc, vành đai, đường trục kinh tế và cầu vượt huyết mạch" 
+            <ProjectCapitalSourcePage 
+              capitalSource="NSNN" 
+              title="DỰ ÁN TRỌNG ĐIỂM SỬ DỤNG VỐN NGÂN SÁCH NHÀ NƯỚC (NSNN)" 
+              subtitle="Giám sát 20 dự án hạ tầng giao thông, công trình dân dụng, y tế, giáo dục và thủy lợi sử dụng vốn ngân sách Trung ương và Tỉnh" 
             />
           } 
         />
         <Route 
-          path="du-an/xay-dung-dan-dung" 
+          path="du-an/ngoai-nsnn" 
           element={
-            <ProjectSectorPage 
-              sector="XAY_DUNG_DAN_DUNG" 
-              title="DỰ ÁN XÂY DỰNG DÂN DỤNG & CÔNG NGHIỆP" 
-              subtitle="Bệnh viện, trường học, trung tâm hội nghị và các khu đô thị dịch vụ" 
+            <ProjectCapitalSourcePage 
+              capitalSource="NGOAI_NSNN" 
+              title="DỰ ÁN TRỌNG ĐIỂM NGOÀI NGÂN SÁCH NHÀ NƯỚC (VỐN DOANH NGHIỆP / FDI / XÃ HỘI HÓA)" 
+              subtitle="Giám sát 14 dự án khu công nghiệp, đại đô thị sinh thái, logistics và năng lượng do các tập đoàn kinh tế đầu tư" 
             />
           } 
         />
-        <Route 
-          path="du-an/nong-nghiep" 
-          element={
-            <ProjectSectorPage 
-              sector="NONG_NGHIEP" 
-              title="DỰ ÁN NÔNG NGHIỆP & THỦY LỢI" 
-              subtitle="Hệ thống đê sông Hồng, trạm bơm tiêu úng và các khu nông nghiệp công nghệ cao" 
-            />
-          } 
-        />
+        {/* Redirect các route cũ để tương thích ngược */}
+        <Route path="du-an/giao-thong" element={<Navigate to="/du-an/su-dung-nsnn" replace />} />
+        <Route path="du-an/xay-dung-dan-dung" element={<Navigate to="/du-an/ngoai-nsnn" replace />} />
+        <Route path="du-an/nong-nghiep" element={<Navigate to="/du-an/su-dung-nsnn" replace />} />
 
         {/* 3. HỢP PHẦN GIẢI NGÂN VỐN ĐẦU TƯ CÔNG */}
         <Route path="giai-ngan" element={<Navigate to="/giai-ngan/dashboard" replace />} />

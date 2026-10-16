@@ -85,13 +85,28 @@ export const TaskService = {
 
 /* ================= PROJECT SERVICE ================= */
 export const ProjectService = {
-  getAll: (filters?: Partial<GlobalFilterState> & { sector?: string; capitalSource?: string }): ProjectItem[] => {
+  getAll: (filters?: Partial<GlobalFilterState> & { 
+    sector?: string; 
+    capitalSource?: string;
+    stage?: string;
+    riskLevel?: string;
+    delayedStage?: string;
+  }): ProjectItem[] => {
     let list = [...PROJECTS_MOCK];
     if (filters?.sector && filters.sector !== 'ALL') {
       list = list.filter(p => p.sector === filters.sector);
     }
     if (filters?.capitalSource && filters.capitalSource !== 'ALL') {
       list = list.filter(p => p.capitalSource === filters.capitalSource);
+    }
+    if (filters?.stage && filters.stage !== 'ALL') {
+      list = list.filter(p => p.currentStage === filters.stage);
+    }
+    if (filters?.riskLevel && filters.riskLevel !== 'ALL') {
+      list = list.filter(p => p.expediteInfo?.riskLevel === filters.riskLevel);
+    }
+    if (filters?.delayedStage && filters.delayedStage !== 'ALL') {
+      list = list.filter(p => p.expediteInfo?.delayedStage === filters.delayedStage);
     }
     if (filters?.district && filters.district !== 'ALL') {
       list = list.filter(p => p.district.includes(filters.district!));
@@ -101,7 +116,8 @@ export const ProjectService = {
       list = list.filter(p => 
         p.name.toLowerCase().includes(q) || 
         p.code.toLowerCase().includes(q) ||
-        p.investor.toLowerCase().includes(q)
+        p.investor.toLowerCase().includes(q) ||
+        p.district.toLowerCase().includes(q)
       );
     }
     return list;
@@ -116,27 +132,98 @@ export const ProjectService = {
     const inProgress = projects.filter(p => p.status === 'DANG_TRIEN_KHAI').length;
     const completed = projects.filter(p => p.status === 'HOAN_THANH').length;
     const delayed = projects.filter(p => p.status === 'CHAM_TIEN_DO').length;
-    const preparation = projects.filter(p => p.status === 'CHUAN_BI_DAU_TU').length;
+    const riskCount = projects.filter(p => p.expediteInfo?.riskLevel === 'NGUY_CO_CHAM').length;
+    const preparation = projects.filter(p => p.status === 'CHUAN_BI_DAU_TU' || p.currentStage === 'THU_TUC_DAU_TU').length;
 
     const totalInvestment = projects.reduce((sum, p) => sum + p.totalInvestment, 0);
     const totalDisbursed = projects.reduce((sum, p) => sum + p.disbursedAmount, 0);
     const avgProgress = total > 0 ? (projects.reduce((sum, p) => sum + p.progress, 0) / total).toFixed(1) : '0';
 
-    const nsnnCount = projects.filter(p => p.capitalSource === 'NSNN').length;
-    const outsideNsnnCount = projects.filter(p => p.capitalSource === 'NGOAI_NSNN').length;
+    // NSNN Specific
+    const nsnnProjects = projects.filter(p => p.capitalSource === 'NSNN');
+    const nsnnCount = nsnnProjects.length;
+    const nsnnInvestment = nsnnProjects.reduce((sum, p) => sum + p.totalInvestment, 0);
+    const nsnnDisbursed = nsnnProjects.reduce((sum, p) => sum + p.disbursedAmount, 0);
+    const nsnnDelayed = nsnnProjects.filter(p => p.status === 'CHAM_TIEN_DO').length;
+    const nsnnRisk = nsnnProjects.filter(p => p.expediteInfo?.riskLevel === 'NGUY_CO_CHAM').length;
+
+    // Ngoài NSNN Specific
+    const outsideNsnnProjects = projects.filter(p => p.capitalSource === 'NGOAI_NSNN');
+    const outsideNsnnCount = outsideNsnnProjects.length;
+    const outsideNsnnInvestment = outsideNsnnProjects.reduce((sum, p) => sum + p.totalInvestment, 0);
+    const outsideNsnnDisbursed = outsideNsnnProjects.reduce((sum, p) => sum + p.disbursedAmount, 0);
+    const outsideNsnnDelayed = outsideNsnnProjects.filter(p => p.status === 'CHAM_TIEN_DO').length;
+    const outsideNsnnRisk = outsideNsnnProjects.filter(p => p.expediteInfo?.riskLevel === 'NGUY_CO_CHAM').length;
+
+    // Breakdown theo giai đoạn
+    const stageProcedureCount = projects.filter(p => p.currentStage === 'THU_TUC_DAU_TU').length;
+    const stageClearanceCount = projects.filter(p => p.currentStage === 'GIAI_PHONG_MAT_BANG').length;
+    const stageConstructionCount = projects.filter(p => p.currentStage === 'THI_CONG_XAY_DUNG').length;
+    const stageCompletedCount = projects.filter(p => p.currentStage === 'HOAN_THANH').length;
 
     return {
       total,
       inProgress,
       completed,
       delayed,
+      riskCount,
       preparation,
       totalInvestment: totalInvestment.toFixed(1),
       totalDisbursed: totalDisbursed.toFixed(1),
       avgProgress,
+
+      // NSNN
       nsnnCount,
-      outsideNsnnCount
+      nsnnInvestment: nsnnInvestment.toFixed(1),
+      nsnnDisbursed: nsnnDisbursed.toFixed(1),
+      nsnnDelayed,
+      nsnnRisk,
+
+      // Ngoài NSNN
+      outsideNsnnCount,
+      outsideNsnnInvestment: outsideNsnnInvestment.toFixed(1),
+      outsideNsnnDisbursed: outsideNsnnDisbursed.toFixed(1),
+      outsideNsnnDelayed,
+      outsideNsnnRisk,
+
+      // Giai đoạn
+      stageProcedureCount,
+      stageClearanceCount,
+      stageConstructionCount,
+      stageCompletedCount
     };
+  },
+
+  // Đôn đốc dự án trọng điểm
+  expediteProject: (projectId: string, messageText: string, signer: string, deadline?: string): { success: boolean; project: ProjectItem } => {
+    const projIndex = PROJECTS_MOCK.findIndex(p => p.id === projectId);
+    if (projIndex !== -1) {
+      const proj = PROJECTS_MOCK[projIndex];
+      if (!proj.expediteInfo) {
+        proj.expediteInfo = {
+          isDelayedOrRisk: true,
+          riskLevel: 'CHAM_TIEN_DO',
+          delayedStage: 'GIAI_PHONG_MAT_BANG',
+          delayedStageLabel: 'Đôn đốc tiến độ',
+          bottleneckLocation: proj.district,
+          leadDepartment: proj.investor,
+          cooperatingDepartments: [proj.managingDept],
+          detailedDifficulties: proj.landClearanceNote,
+          proposalsAndRecommendations: 'Tập trung chỉ đạo xử lý dứt điểm',
+          expediteHistory: []
+        };
+      }
+      proj.expediteInfo.expediteHistory.unshift({
+        id: `exp-${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        action: `Văn bản đôn đốc chỉ đạo của Lãnh đạo tỉnh`,
+        signer: signer,
+        content: messageText,
+        feedbackDeadline: deadline || '2026-11-15'
+      });
+      return { success: true, project: proj };
+    }
+    throw new Error('Project not found');
   }
 };
 

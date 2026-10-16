@@ -20,9 +20,8 @@ export const SUB_TABS_CONFIG: Record<string, SubTabConfig[]> = {
   ],
   'du-an': [
     { key: 'dashboard', label: 'Dashboard', path: '/du-an/dashboard', isDashboard: true },
-    { key: 'giao-thong', label: 'Giao thông', path: '/du-an/giao-thong' },
-    { key: 'xay-dung-dan-dung', label: 'Xây dựng dân dụng', path: '/du-an/xay-dung-dan-dung' },
-    { key: 'nong-nghiep', label: 'Nông nghiệp', path: '/du-an/nong-nghiep' }
+    { key: 'su-dung-nsnn', label: 'Dự án sử dụng NSNN', path: '/du-an/su-dung-nsnn' },
+    { key: 'ngoai-nsnn', label: 'Dự án ngoài NSNN', path: '/du-an/ngoai-nsnn' }
   ],
   'giai-ngan': [
     { key: 'dashboard', label: 'Dashboard', path: '/giai-ngan/dashboard', isDashboard: true },
